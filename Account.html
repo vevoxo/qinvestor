@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Qinvestor Pro - Account</title>
+  <script src="https://cdn.tailwindcss.com "></script>
+  <script src="https://unpkg.com/feather-icons "></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono :wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap');
+    :root {
+      --primary: #00f0ff;
+      --secondary: #ff00ff;
+      --bg-dark: #0a0a12;
+      --panel: #12121a;
+      --border: #25253a;
+      --text: #e0e0ff;
+      --profit: #00ff85;
+      --loss: #ff3c3c;
+      --glow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+    .font-display {
+      font-family: 'Orbitron', sans-serif;
+    }
+    .profit {
+      color: var(--profit);
+    }
+    .loss {
+      color: var(--loss);
+    }
+    .cyber-button {
+      background: linear-gradient(135deg, var(--panel) 0%, #1a1a2a 100%);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .cyber-button:hover {
+      box-shadow: var(--glow);
+    }
+    .scanlines::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 240, 255, 0.05) 50%,
+        transparent 100%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      animation: scanline 8s linear infinite;
+    }
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+  </style>
+</head>
+<body class="scanlines relative min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="bg-[var(--panel)] border-b border-[var(--border)] px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <i data-feather="user" class="w-5 h-5 text-[var(--primary)]"></i>
+      <h1 class="text-lg font-semibold">Account</h1>
+    </div>
+    <button onclick="window.location.href='index.html'" class="text-sm cyber-button px-3 py-1 rounded">
+      Back
+    </button>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto p-4 space-y-6">
+    <!-- User Info -->
+    <div class="bg-[var(--panel)] p-4 rounded cyber-border">
+      <div class="flex items-center space-x-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center glow">
+          <i data-feather="user" class="w-5 h-5 text-black"></i>
+        </div>
+        <div>
+          <h2 class="font-medium">John Doe</h2>
+          <p class="text-sm text-[var(--text-dim)]">ID: 987654321</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <div class="text-xs text-[var(--text-dim)]">Email</div>
+          <div>johndoe@example.com</div>
+        </div>
+        <div>
+          <div class="text-xs text-[var(--text-dim)]">Status</div>
+          <div class="profit">Active</div>
+        </div>
+        <div>
+          <div class="text-xs text-[var(--text-dim)]">Platform</div>
+          <div>MT5</div>
+        </div>
+        <div>
+          <div class="text-xs text-[var(--text-dim)]">Leverage</div>
+          <div>1:500</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account Summary -->
+    <div class="bg-[var(--panel)] p-4 rounded cyber-border">
+      <h3 class="text-sm font-medium mb-3">Account Summary</h3>
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between">
+          <span class="text-[var(--text-dim)]">Balance</span>
+          <span>$10,245.67</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-[var(--text-dim)]">Equity</span>
+          <span class="profit">$10,532.12</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-[var(--text-dim)]">Free Margin</span>
+          <span>$9,286.62</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-[var(--text-dim)]">Margin Level</span>
+          <span class="profit">∞</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-[var(--text-dim)]">Used Margin</span>
+          <span>$0.00</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-[var(--text-dim)]">P/L</span>
+          <span class="profit">+$286.45</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="space-y-3">
+      <button class="w-full cyber-button py-3 rounded flex items-center justify-center space-x-2">
+        <i data-feather="credit-card" class="w-4 h-4"></i>
+        <span>Deposit Funds</span>
+      </button>
+      <button class="w-full cyber-button py-3 rounded flex items-center justify-center space-x-2">
+        <i data-feather="dollar-sign" class="w-4 h-4"></i>
+        <span>Withdraw Funds</span>
+      </button>
+      <button class="w-full cyber-button py-3 rounded flex items-center justify-center space-x-2">
+        <i data-feather="settings" class="w-4 h-4"></i>
+        <span>Account Settings</span>
+      </button>
+      <button class="w-full cyber-button py-3 rounded flex items-center justify-center space-x-2">
+        <i data-feather="log-out" class="w-4 h-4"></i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- Footer Navigation -->
+  <nav class="flex justify-around items-center bg-[var(--panel)] border-t border-[var(--border)] py-2">
+    <div onclick="window.location.href='index.html'" class="flex flex-col items-center">
+      <i data-feather="activity" class="w-5 h-5"></i>
+      <span class="text-xs mt-1">Trade</span>
+    </div>
+    <div onclick="window.location.href='positions.html'" class="flex flex-col items-center">
+      <i data-feather="briefcase" class="w-5 h-5"></i>
+      <span class="text-xs mt-1">Positions</span>
+    </div>
+    <div onclick="window.location.href='history.html'" class="flex flex-col items-center">
+      <i data-feather="clock" class="w-5 h-5"></i>
+      <span class="text-xs mt-1">History</span>
+    </div>
+    <div onclick="window.location.href='account.html'" class="flex flex-col items-center cursor-pointer">
+        <i data-feather="user" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">ACCOUNT</span>
+    </div>
+    <!-- Sticky Mobile Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--panel)] border-t border-[var(--border)] py-2 z-50 flex justify-around items-center">
+    <a href="index.html" class="flex flex-col items-center">
+        <i data-feather="activity" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">Trade</span>
+    </a>
+    <a href="positions.html" class="flex flex-col items-center">
+        <i data-feather="briefcase" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">Positions</span>
+    </a>
+    <a href="history.html" class="flex flex-col items-center">
+        <i data-feather="clock" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">History</span>
+    </a>
+    <a href="account.html" class="flex flex-col items-center">
+        <i data-feather="user" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">Account</span>
+    </a>
+</nav>
+
+  <!-- Feather Icons -->
+  <script>
+    feather.replace();
+  </script>
+</body>
+</html>

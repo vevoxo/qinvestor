@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Qinvestor Pro - Open Positions</title>
+  <script src="https://cdn.tailwindcss.com "></script>
+  <script src="https://unpkg.com/feather-icons "></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono :wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap');
+    :root {
+      --primary: #00f0ff;
+      --secondary: #ff00ff;
+      --bg-dark: #0a0a12;
+      --panel: #12121a;
+      --border: #25253a;
+      --text: #e0e0ff;
+      --profit: #00ff85;
+      --loss: #ff3c3c;
+      --glow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+    .font-display {
+      font-family: 'Orbitron', sans-serif;
+    }
+    .profit {
+      color: var(--profit);
+    }
+    .loss {
+      color: var(--loss);
+    }
+    .cyber-button {
+      background: linear-gradient(135deg, var(--panel) 0%, #1a1a2a 100%);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: all 0.2s ease;
+    }
+    .cyber-button:hover {
+      box-shadow: var(--glow);
+    }
+    .scanlines::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 240, 255, 0.05) 50%,
+        transparent 100%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      animation: scanline 8s linear infinite;
+    }
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+  </style>
+</head>
+<body class="scanlines relative min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="bg-[var(--panel)] border-b border-[var(--border)] px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <i data-feather="briefcase" class="w-5 h-5 text-[var(--primary)]"></i>
+      <h1 class="text-lg font-semibold">Open Positions</h1>
+    </div>
+    <button onclick="window.location.href='index.html'" class="text-sm cyber-button px-3 py-1 rounded">
+      Back
+    </button>
+  </header>
+
+  <!-- Trade List -->
+  <main class="flex-1 overflow-y-auto p-4">
+    <div id="trade-list" class="space-y-4">
+      <!-- Trades will be injected here -->
+    </div>
+  </main>
+
+  <!-- Footer Navigation -->
+  <nav class="flex justify-around items-center bg-[var(--panel)] border-t border-[var(--border)] py-2">
+    <div onclick="window.location.href='index.html'" class="flex flex-col items-center">
+      <i data-feather="activity" class="w-5 h-5"></i>
+      <span class="text-xs mt-1">Trade</span>
+    </div>
+    <div class="flex flex-col items-center active-tab">
+      <i data-feather="briefcase" class="w-5 h-5"></i>
+      <span class="text-xs mt-1">Positions</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <i data-feather="clock" class="w-5 h-5"></i>
+      <span class="text-xs mt-1">History</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <i data-feather="user" class="w-5 h-5"></i>
+      <span class="text-xs mt-1">Account</span>
+    </div>
+  </nav>
+
+  <!-- Script Logic -->
+  <script>
+    // === Reuse openTrades from index.html context ===
+    let openTrades = [];
+    let tradeIdCounter = 1;
+
+    function openTrade(symbol, type, volume, price) {
+      const sl = type === 'buy' ? (price * 0.99).toFixed(4) : (price * 1.01).toFixed(4);
+      const tp = type === 'buy' ? (price * 1.01).toFixed(4) : (price * 0.99).toFixed(4);
+      const trade = {
+        id: tradeIdCounter++,
+        symbol,
+        type,
+        volume: parseFloat(volume),
+        openPrice: parseFloat(price.toFixed(4)),
+        currentPrice: parseFloat(price.toFixed(4)),
+        sl,
+        tp,
+        pl: 0,
+        timestamp: new Date().toLocaleTimeString()
+      };
+      openTrades.push(trade);
+    }
+
+    function updateTradeList() {
+      const tradeList = document.getElementById('trade-list');
+      tradeList.innerHTML = '';
+
+      if (openTrades.length === 0) {
+        tradeList.innerHTML = '<p class="text-center text-[var(--text-dim)]">No open positions.</p>';
+        return;
+      }
+
+      openTrades.forEach(trade => {
+        const card = document.createElement('div');
+        card.className = 'bg-[var(--panel)] p-4 rounded cyber-border';
+
+        card.innerHTML = `
+          <div class="flex justify-between items-center mb-2">
+            <div class="font-medium">${trade.symbol}</div>
+            <div class="text-sm ${parseFloat(trade.pl) >= 0 ? 'profit' : 'loss'}">
+              ${parseFloat(trade.pl) >= 0 ? '+' : ''}${trade.pl}
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-sm text-[var(--text-dim)] mb-3">
+            <div>Type: ${trade.type.toUpperCase()}</div>
+            <div>Size: ${trade.volume}</div>
+            <div>Open: ${trade.openPrice}</div>
+            <div>Current: ${trade.currentPrice}</div>
+            <div>SL: ${trade.sl}</div>
+            <div>TP: ${trade.tp}</div>
+          </div>
+          <button onclick="closeTrade(${trade.id})" class="w-full cyber-button-primary py-2 rounded text-sm">Close</button>
+        `;
+        tradeList.appendChild(card);
+      });
+    }
+
+    function closeTrade(id) {
+      const index = openTrades.findIndex(trade => trade.id === id);
+      if (index !== -1) {
+        const trade = openTrades[index];
+        const pl = parseFloat(trade.pl);
+        updateBalance(pl);
+        openTrades.splice(index, 1);
+        updateTradeList();
+      }
+    }
+
+    function updateBalance(amount) {
+      const equityElements = document.querySelectorAll('.font-display.font-bold');
+      equityElements.forEach(el => {
+        if (el.textContent.includes('$')) {
+          let currentValue = parseFloat(el.textContent.replace(/[^0-9.]/g, ''));
+          let newValue = currentValue + amount;
+          el.textContent = `$${newValue.toFixed(2)}`;
+        }
+      });
+    }
+
+    function simulateTradeUpdates() {
+      openTrades.forEach(trade => {
+        const change = (Math.random() - 0.5) * 0.01;
+        trade.currentPrice += change;
+        trade.pl = ((trade.currentPrice - trade.openPrice) * trade.volume * 100000).toFixed(2);
+      });
+      updateTradeList();
+    }
+
+    // Initialize with some test trades
+    openTrade("EUR/USD", "buy", 0.1, 1.0845);
+    openTrade("XAU/USD", "buy", 0.05, 2175.50);
+    openTrade("BTC/USD", "sell", 0.02, 68500.00);
+
+    // Update every 2 seconds
+    setInterval(simulateTradeUpdates, 2000);
+
+    // Initial render
+    updateTradeList();
+
+    // Feather Icons
+    feather.replace();
+  </script>
+  <!-- Sticky Mobile Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--panel)] border-t border-[var(--border)] py-2 z-50 flex justify-around items-center">
+    <a href="index.html" class="flex flex-col items-center">
+        <i data-feather="activity" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">Trade</span>
+    </a>
+    <a href="positions.html" class="flex flex-col items-center">
+        <i data-feather="briefcase" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">Positions</span>
+    </a>
+    <a href="history.html" class="flex flex-col items-center">
+        <i data-feather="clock" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">History</span>
+    </a>
+    <a href="account.html" class="flex flex-col items-center">
+        <i data-feather="user" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">Account</span>
+    </a>
+</nav>
+</body>
+</html>

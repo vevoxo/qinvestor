@@ -740,7 +740,25 @@
                     </table>
                 </div>
             </div>
-            
+            <!-- Sticky Mobile Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--panel)] border-t border-[var(--border)] py-2 z-50 flex justify-around items-center">
+    <a href="index.html" class="flex flex-col items-center">
+        <i data-feather="activity" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">Trade</span>
+    </a>
+    <a href="positions.html" class="flex flex-col items-center">
+        <i data-feather="briefcase" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">Positions</span>
+    </a>
+    <a href="history.html" class="flex flex-col items-center">
+        <i data-feather="clock" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">History</span>
+    </a>
+    <a href="account.html" class="flex flex-col items-center">
+        <i data-feather="user" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">Account</span>
+    </a>
+</nav>
             <!-- Mobile Trade Panel -->
             <div class="md:hidden bg-[var(--panel)] border-t border-[var(--border)] p-3">
                 <div class="flex justify-between mb-3">
@@ -768,26 +786,25 @@
             </div>
         </main>
     </div>
-
-    <!-- Mobile Navigation -->
-    <nav class="md:hidden flex justify-around items-center bg-[var(--panel)] border-t border-[var(--border)] py-2">
-        <div class="flex flex-col items-center active-tab">
-            <i data-feather="activity" class="w-5 h-5"></i>
-            <span class="text-xs mt-1">TRADE</span>
-        </div>
-        <div class="flex flex-col items-center">
-            <i data-feather="briefcase" class="w-5 h-5"></i>
-            <span class="text-xs mt-1">POSITIONS</span>
-        </div>
-        <div class="flex flex-col items-center">
-            <i data-feather="clock" class="w-5 h-5"></i>
-            <span class="text-xs mt-1">HISTORY</span>
-        </div>
-        <div class="flex flex-col items-center">
-            <i data-feather="user" class="w-5 h-5"></i>
-            <span class="text-xs mt-1">ACCOUNT</span>
-        </div>
-    </nav>
+<!-- Mobile Navigation -->
+<nav class="md:hidden flex justify-around items-center bg-[var(--panel)] border-t border-[var(--border)] py-2">
+    <div onclick="window.location.href='index.html'" class="flex flex-col items-center active-tab">
+        <i data-feather="activity" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">TRADE</span>
+    </div>
+    <div onclick="window.location.href='positions.html'" class="flex flex-col items-center">
+        <i data-feather="briefcase" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">POSITIONS</span>
+    </div>
+    <div onclick="window.location.href='history.html'" class="flex flex-col items-center">
+        <i data-feather="clock" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">HISTORY</span>
+    </div>
+    <div class="flex flex-col items-center">
+        <i data-feather="user" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">ACCOUNT</span>
+    </div>
+</nav>
 
     <script>
         // Initialize Feather Icons
@@ -919,7 +936,9 @@ function updateBalance(amount) {
                     "scalesProperties.lineColor": "#25253a"
                 }
             });
+            
         }
+        
         
         // Wait for TradingView script to load
         if (typeof TradingView !== 'undefined') {
@@ -998,19 +1017,7 @@ function updateBalance(amount) {
     });
             
             // Update P/L in open positions with realistic changes
-            const plElements = document.querySelectorAll('td.profit, td.loss');
-            plElements.forEach(el => {
-                const currentValue = parseFloat(el.textContent.replace(/[^0-9.-]/g, ''));
-                const positionSize = parseFloat(el.parentElement.querySelector('td:nth-child(3)').textContent);
-                
-                // More realistic P/L changes based on position size
-                const change = (Math.random() - 0.5) * 10 * positionSize;
-                const newValue = currentValue + change;
-                
-                el.textContent = newValue > 0 ? `+$${newValue.toFixed(2)}` : `-$${Math.abs(newValue).toFixed(2)}`;
-                el.classList.remove(newValue > 0 ? 'loss' : 'profit');
-                el.classList.add(newValue > 0 ? 'profit' : 'loss');
-            });
+             
             
             // Update equity and balance with small random changes
             const equityElements = document.querySelectorAll('.font-display.font-bold');
@@ -1104,5 +1111,6 @@ function updateBalance(amount) {
         // Update connection status every 10 seconds
         setInterval(updateConnectionStatus, 10000);
     </script>
+    
 </body>
 </html>
