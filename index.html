@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qinvestors Pro - Next-Gen Trading</title>
+    <title>Qinvestors Pro - Live Trading</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://s3.tradingview.com/tv.js"></script>
@@ -23,6 +23,8 @@
             --loss: #ff3c3c;
             --glow: 0 0 10px rgba(0, 240, 255, 0.3);
             --glow-secondary: 0 0 10px rgba(255, 0, 255, 0.3);
+            --glow-profit: 0 0 10px rgba(0, 255, 133, 0.3);
+            --glow-loss: 0 0 10px rgba(255, 60, 60, 0.3);
         }
         
         body {
@@ -78,6 +80,14 @@
         
         .glow-secondary {
             box-shadow: var(--glow-secondary);
+        }
+        
+        .glow-profit {
+            box-shadow: var(--glow-profit);
+        }
+        
+        .glow-loss {
+            box-shadow: var(--glow-loss);
         }
         
         .cyber-border {
@@ -209,6 +219,60 @@
             background-size: 20px 20px;
         }
         
+        /* Neon flicker effect */
+        @keyframes neon-flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+                opacity: 1;
+                text-shadow: 0 0 5px var(--primary);
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+                opacity: 0.8;
+                text-shadow: none;
+            }
+        }
+        
+        .neon {
+            animation: neon-flicker 1.5s infinite alternate;
+        }
+        
+        /* Trade execution animation */
+        @keyframes trade-executed {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .trade-executed {
+            animation: trade-executed 0.5s ease-out;
+        }
+        
+        /* Position highlight */
+        .position-highlight {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .position-highlight::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(0, 240, 255, 0.1) 50%,
+                transparent 100%
+            );
+            animation: highlight 2s ease-out;
+        }
+        
+        @keyframes highlight {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             body {
@@ -225,7 +289,7 @@
     <!-- Desktop Header -->
     <header class="hidden md:flex items-center justify-between px-6 py-3 bg-[var(--panel)] border-b border-[var(--border)]">
         <div class="flex items-center space-x-8">
-            <div class="text-xl font-display font-bold text-[var(--primary)] flex items-center">
+            <div class="text-xl font-display font-bold text-[var(--primary)] flex items-center neon">
                 <span class="mr-2">Qinvestor</span>
                 <span class="text-xs bg-[var(--primary)] text-[var(--bg-dark)] px-2 py-1 rounded-full font-sans">PRO</span>
             </div>
@@ -257,19 +321,19 @@
             <div class="flex space-x-6">
                 <div class="text-right">
                     <div class="text-xs text-[var(--text-dim)]">BALANCE</div>
-                    <div class="font-medium">$10,245.67</div>
+                    <span id="walletBalance" class="font-medium">$10,000.00</span>
                 </div>
                 <div class="text-right">
                     <div class="text-xs text-[var(--text-dim)]">EQUITY</div>
-                    <div class="font-medium">$10,532.12</div>
+                    <div id="equityValue" class="font-medium">$10,532.12</div>
                 </div>
                 <div class="text-right">
                     <div class="text-xs text-[var(--text-dim)]">MARGIN</div>
-                    <div class="font-medium">$1,245.50</div>
+                    <div id="marginValue" class="font-medium">$1,245.50</div>
                 </div>
                 <div class="text-right">
                     <div class="text-xs text-[var(--text-dim)]">P/L</div>
-                    <div class="font-medium profit">+$286.45</div>
+                    <div id="plValue" class="font-medium profit">+$286.45</div>
                 </div>
             </div>
             
@@ -370,7 +434,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <div class="text-sm font-medium">MARKET WATCH</div>
                     <div class="flex space-x-2">
-                        <button class="cyber-button p-1 rounded">
+                        <button class="cyber-button p-1 rounded" onclick="toggleSearch()">
                             <i data-feather="search" class="w-4 h-4"></i>
                         </button>
                         <button class="cyber-button p-1 rounded">
@@ -379,148 +443,45 @@
                     </div>
                 </div>
                 
-                <div class="flex border-b border-[var(--border)]">
-                    <div class="pb-2 px-2 font-medium cursor-pointer active-tab">FAVORITES</div>
-                    <div class="pb-2 px-2 text-[var(--text-dim)] cursor-pointer">ALL</div>
+                <!-- Search Bar (hidden by default) -->
+                <div id="searchBar" class="hidden mb-3">
+                    <input type="text" id="symbolSearch" placeholder="Search markets..." class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]" oninput="filterSymbols()">
                 </div>
                 
-                <div class="mt-4 space-y-2">
-                    <!-- Symbol List -->
-                    <div class="symbol-card p-3 rounded flex justify-between items-center cyber-border transition-all duration-200">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">FX</span>
-                            </div>
-                            <div>
-                                <div class="font-medium">EUR/USD</div>
-                                <div class="text-xs text-[var(--text-dim)]">Spread: 0.2</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="font-display">1.0845</div>
-                            <div class="text-xs profit">+0.12%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="symbol-card p-3 rounded flex justify-between items-center cyber-border transition-all duration-200">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">FX</span>
-                            </div>
-                            <div>
-                                <div class="font-medium">GBP/USD</div>
-                                <div class="text-xs text-[var(--text-dim)]">Spread: 0.3</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="font-display">1.2650</div>
-                            <div class="text-xs loss">-0.05%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="symbol-card p-3 rounded flex justify-between items-center cyber-border transition-all duration-200">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">FX</span>
-                            </div>
-                            <div>
-                                <div class="font-medium">USD/JPY</div>
-                                <div class="text-xs text-[var(--text-dim)]">Spread: 0.4</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="font-display">151.35</div>
-                            <div class="text-xs profit">+0.24%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="symbol-card p-3 rounded flex justify-between items-center cyber-border transition-all duration-200">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">MT</span>
-                            </div>
-                            <div>
-                                <div class="font-medium">XAU/USD</div>
-                                <div class="text-xs text-[var(--text-dim)]">Spread: 0.5</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="font-display">2,185.50</div>
-                            <div class="text-xs profit">+0.87%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="symbol-card p-3 rounded flex justify-between items-center cyber-border transition-all duration-200">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">CR</span>
-                            </div>
-                            <div>
-                                <div class="font-medium">BTC/USD</div>
-                                <div class="text-xs text-[var(--text-dim)]">Spread: 12.5</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="font-display">68,245.00</div>
-                            <div class="text-xs loss">-1.32%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="symbol-card p-3 rounded flex justify-between items-center cyber-border transition-all duration-200">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">CR</span>
-                            </div>
-                            <div>
-                                <div class="font-medium">ETH/USD</div>
-                                <div class="text-xs text-[var(--text-dim)]">Spread: 5.2</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="font-display">3,450.25</div>
-                            <div class="text-xs profit">+2.14%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="symbol-card p-3 rounded flex justify-between items-center cyber-border transition-all duration-200">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">ST</span>
-                            </div>
-                            <div>
-                                <div class="font-medium">AAPL</div>
-                                <div class="text-xs text-[var(--text-dim)]">Spread: 0.15</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="font-display">172.50</div>
-                            <div class="text-xs loss">-0.45%</div>
-                        </div>
-                    </div>
+                <div class="flex border-b border-[var(--border)]">
+                    <div class="pb-2 px-2 font-medium cursor-pointer active-tab" onclick="switchTab('favorites')">FAVORITES</div>
+                    <div class="pb-2 px-2 text-[var(--text-dim)] cursor-pointer" onclick="switchTab('all')">ALL</div>
+                    <div class="pb-2 px-2 text-[var(--text-dim)] cursor-pointer" onclick="switchTab('forex')">FOREX</div>
+                    <div class="pb-2 px-2 text-[var(--text-dim)] cursor-pointer" onclick="switchTab('crypto')">CRYPTO</div>
+                    <div class="pb-2 px-2 text-[var(--text-dim)] cursor-pointer" onclick="switchTab('stocks')">STOCKS</div>
+                </div>
+                
+                <div class="mt-4 space-y-2" id="symbolList">
+                    <!-- Symbol List will be populated by JavaScript -->
                 </div>
                 
                 <div class="mt-6">
                     <div class="text-sm font-medium mb-2">QUICK TRADE</div>
                     <div class="cyber-border rounded p-3">
                         <div class="flex justify-between items-center mb-2">
-                            <div class="text-sm">EUR/USD</div>
-                            <div class="font-display">1.0845</div>
+                            <div class="text-sm" id="selectedSymbol">EUR/USD</div>
+                            <div class="font-display" id="selectedPrice">1.0845</div>
                         </div>
                         <div class="grid grid-cols-2 gap-2 mb-2">
-                            <button onclick="handleTrade('buy')" class="cyber-button-primary py-2 rounded text-sm mr-1">BUY</button>
-<button onclick="handleTrade('sell')" class="cyber-button-secondary py-2 rounded text-sm">SELL</button>
+                            <button onclick="executeTrade('buy')" class="cyber-button-primary py-2 rounded text-sm mr-1">BUY</button>
+                            <button onclick="executeTrade('sell')" class="cyber-button-secondary py-2 rounded text-sm">SELL</button>
                         </div>
                         <div class="text-xs text-[var(--text-dim)] mb-1">Volume (Lots)</div>
                         <div class="flex mb-3">
-                            <input type="number" value="0.1" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
+                            <input type="number" id="tradeVolume" value="0.1" min="0.01" step="0.01" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
                         </div>
                         <div class="text-xs text-[var(--text-dim)] mb-1">Take Profit</div>
                         <div class="flex mb-1">
-                            <input type="number" placeholder="Price" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
+                            <input type="number" id="takeProfit" placeholder="Price" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
                         </div>
                         <div class="text-xs text-[var(--text-dim)] mb-1">Stop Loss</div>
                         <div class="flex">
-                            <input type="number" placeholder="Price" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
+                            <input type="number" id="stopLoss" placeholder="Price" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
                         </div>
                     </div>
                 </div>
@@ -532,13 +493,13 @@
             <!-- Chart Tools (Desktop) -->
             <div class="hidden md:flex items-center justify-between px-4 py-2 bg-[var(--panel)] border-b border-[var(--border)]">
                 <div class="flex space-x-2">
-                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer">1m</div>
-                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer">5m</div>
-                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer">15m</div>
-                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer active-tab">1H</div>
-                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer">4H</div>
-                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer">1D</div>
-                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer">1W</div>
+                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer" onclick="changeTimeframe('1')">1m</div>
+                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer" onclick="changeTimeframe('5')">5m</div>
+                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer" onclick="changeTimeframe('15')">15m</div>
+                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer active-tab" onclick="changeTimeframe('60')">1H</div>
+                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer" onclick="changeTimeframe('240')">4H</div>
+                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer" onclick="changeTimeframe('1D')">1D</div>
+                    <div class="px-3 py-1 text-xs cyber-button cursor-pointer" onclick="changeTimeframe('1W')">1W</div>
                 </div>
                 
                 <div class="flex space-x-2">
@@ -573,36 +534,36 @@
             <div class="flex items-center justify-between px-4 py-2 bg-[var(--panel)] border-b border-[var(--border)]">
                 <div class="flex items-center">
                     <div class="w-8 h-8 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                        <span class="text-xs">FX</span>
+                        <span class="text-xs" id="symbolType">FX</span>
                     </div>
-                    <div class="font-display font-medium">EUR/USD</div>
-                    <div class="ml-4 text-xs text-[var(--text-dim)]">OANDA:FX_EURUSD</div>
+                    <div class="font-display font-medium" id="currentSymbol">EUR/USD</div>
+                    <div class="ml-4 text-xs text-[var(--text-dim)]" id="symbolProvider">OANDA:FX_EURUSD</div>
                 </div>
                 
                 <div class="flex space-x-6">
                     <div class="text-right">
                         <div class="text-xs text-[var(--text-dim)]">BID</div>
-                        <div class="font-display">1.0845</div>
+                        <div class="font-display" id="bidPrice">1.0845</div>
                     </div>
                     <div class="text-right">
                         <div class="text-xs text-[var(--text-dim)]">ASK</div>
-                        <div class="font-display">1.0847</div>
+                        <div class="font-display" id="askPrice">1.0847</div>
                     </div>
                     <div class="text-right">
                         <div class="text-xs text-[var(--text-dim)]">SPREAD</div>
-                        <div>0.2</div>
+                        <div id="spreadValue">0.2</div>
                     </div>
                     <div class="text-right">
                         <div class="text-xs text-[var(--text-dim)]">TODAY</div>
-                        <div class="profit">+0.12%</div>
+                        <div class="profit" id="dailyChange">+0.12%</div>
                     </div>
                     <div class="text-right">
                         <div class="text-xs text-[var(--text-dim)]">HIGH</div>
-                        <div>1.0856</div>
+                        <div id="dailyHigh">1.0856</div>
                     </div>
                     <div class="text-right">
                         <div class="text-xs text-[var(--text-dim)]">LOW</div>
-                        <div>1.0832</div>
+                        <div id="dailyLow">1.0832</div>
                     </div>
                 </div>
             </div>
@@ -612,301 +573,377 @@
                 <div id="tradingview-chart" class="chart-container"></div>
             </div>
             
-            <!-- Mobile Market Overview -->
-            <div class="md:hidden px-4 py-3 overflow-x-auto">
-                <div class="text-sm font-medium mb-2">FAVORITES</div>
-                <div class="flex space-x-3">
-                    <div class="mobile-market-card p-3 bg-[var(--panel)] rounded cyber-border">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">FX</span>
-                            </div>
-                            <div class="text-sm">EUR/USD</div>
-                        </div>
-                        <div class="text-xs text-[var(--text-dim)] mt-1">Spread: 0.2</div>
-                        <div class="font-display text-lg mt-1">1.0845</div>
-                        <div class="text-xs profit mt-1">+0.12%</div>
-                        <div class="text-xs text-[var(--text-dim)] mt-1">Low: 1.0832</div>
-                        <div class="text-xs text-[var(--text-dim)]">High: 1.0856</div>
+            <!-- Trade Panel (Desktop) -->
+            <div class="hidden md:block h-64 bg-[var(--panel)] border-t border-[var(--border)] overflow-y-auto">
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="text-sm font-medium">OPEN POSITIONS</div>
+                        <div class="text-xs text-[var(--text-dim)]" id="positionsCount">0 positions</div>
                     </div>
                     
-                    <div class="mobile-market-card p-3 bg-[var(--panel)] rounded cyber-border">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">FX</span>
-                            </div>
-                            <div class="text-sm">GBP/USD</div>
-                        </div>
-                        <div class="text-xs text-[var(--text-dim)] mt-1">Spread: 0.3</div>
-                        <div class="font-display text-lg mt-1">1.2650</div>
-                        <div class="text-xs loss mt-1">-0.05%</div>
-                        <div class="text-xs text-[var(--text-dim)] mt-1">Low: 1.2638</div>
-                        <div class="text-xs text-[var(--text-dim)]">High: 1.2672</div>
-                    </div>
-                    
-                    <div class="mobile-market-card p-3 bg-[var(--panel)] rounded cyber-border">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">FX</span>
-                            </div>
-                            <div class="text-sm">USD/JPY</div>
-                        </div>
-                        <div class="text-xs text-[var(--text-dim)] mt-1">Spread: 0.4</div>
-                        <div class="font-display text-lg mt-1">151.35</div>
-                        <div class="text-xs profit mt-1">+0.24%</div>
-                        <div class="text-xs text-[var(--text-dim)] mt-1">Low: 151.12</div>
-                        <div class="text-xs text-[var(--text-dim)]">High: 151.48</div>
-                    </div>
-                    
-                    <div class="mobile-market-card p-3 bg-[var(--panel)] rounded cyber-border">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                                <span class="text-xs">MT</span>
-                            </div>
-                            <div class="text-sm">XAU/USD</div>
-                        </div>
-                        <div class="text-xs text-[var(--text-dim)] mt-1">Spread: 0.5</div>
-                        <div class="font-display text-lg mt-1">2,185.50</div>
-                        <div class="text-xs profit mt-1">+0.87%</div>
-                        <div class="text-xs text-[var(--text-dim)] mt-1">Low: 2,178.30</div>
-                        <div class="text-xs text-[var(--text-dim)]">High: 2,188.75</div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-xs text-[var(--text-dim)] border-b border-[var(--border)]">
+                                    <th class="px-4 py-2 text-left">ID</th>
+                                    <th class="px-4 py-2 text-left">SYMBOL</th>
+                                    <th class="px-4 py-2 text-left">VOLUME</th>
+                                    <th class="px-4 py-2 text-left">SL/TP</th>
+                                    <th class="px-4 py-2 text-left">OPEN</th>
+                                    <th class="px-4 py-2 text-left">CURRENT</th>
+                                    <th class="px-4 py-2 text-left">P/L</th>
+                                    <th class="px-4 py-2 text-left">ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="positionsTable">
+                                <!-- Positions will be added here dynamically -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
             
-            <!-- Trade Panel (Desktop) -->
-            <div class="hidden md:block h-64 bg-[var(--panel)] border-t border-[var(--border)] overflow-y-auto">
-                <div class="flex border-b border-[var(--border)]">
-                    <div class="pb-2 px-4 font-medium cursor-pointer active-tab">OPEN POSITIONS (3)</div>
-                    <div class="pb-2 px-4 text-[var(--text-dim)] cursor-pointer">PENDING ORDERS (0)</div>
-                    <div class="pb-2 px-4 text-[var(--text-dim)] cursor-pointer">HISTORY</div>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-[var(--border)]">
-                        <thead>
-                            <tr>
-                                <th class="px-4 py-2 text-left text-xs text-[var(--text-dim)]">TICKET</th>
-                                <th class="px-4 py-2 text-left text-xs text-[var(--text-dim)]">SYMBOL</th>
-                                <th class="px-4 py-2 text-left text-xs text-[var(--text-dim)]">SIZE</th>
-                                <th class="px-4 py-2 text-left text-xs text-[var(--text-dim)]">SL/TP</th>
-                                <th class="px-4 py-2 text-left text-xs text-[var(--text-dim)]">OPEN PRICE</th>
-                                <th class="px-4 py-2 text-left text-xs text-[var(--text-dim)]">PRICE</th>
-                                <th class="px-4 py-2 text-left text-xs text-[var(--text-dim)]">P/L</th>
-                                <th class="px-4 py-2 text-left text-xs text-[var(--text-dim)]">ACTIONS</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-[var(--border)]">
-                            <tr>
-                                <td class="px-4 py-2 text-sm font-mono">#123456</td>
-                                <td class="px-4 py-2 text-sm">EUR/USD</td>
-                                <td class="px-4 py-2 text-sm">0.10</td>
-                                <td class="px-4 py-2 text-sm">1.0800 / 1.0900</td>
-                                <td class="px-4 py-2 text-sm">1.0825</td>
-                                <td class="px-4 py-2 text-sm">1.0845</td>
-                                <td class="px-4 py-2 text-sm profit">+$20.00</td>
-                                <td class="px-4 py-2 text-sm">
-                                    <button class="cyber-button-primary px-2 py-1 text-xs mr-1">CLOSE</button>
-                                    <button class="cyber-button px-2 py-1 text-xs">EDIT</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-2 text-sm font-mono">#123457</td>
-                                <td class="px-4 py-2 text-sm">XAU/USD</td>
-                                <td class="px-4 py-2 text-sm">0.05</td>
-                                <td class="px-4 py-2 text-sm">2,150.00 / 2,200.00</td>
-                                <td class="px-4 py-2 text-sm">2,175.50</td>
-                                <td class="px-4 py-2 text-sm">2,185.50</td>
-                                <td class="px-4 py-2 text-sm profit">+$50.00</td>
-                                <td class="px-4 py-2 text-sm">
-                                    <button class="cyber-button-primary px-2 py-1 text-xs mr-1">CLOSE</button>
-                                    <button class="cyber-button px-2 py-1 text-xs">EDIT</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-2 text-sm font-mono">#123458</td>
-                                <td class="px-4 py-2 text-sm">BTC/USD</td>
-                                <td class="px-4 py-2 text-sm">0.02</td>
-                                <td class="px-4 py-2 text-sm">65,000.00 / 70,000.00</td>
-                                <td class="px-4 py-2 text-sm">68,500.00</td>
-                                <td class="px-4 py-2 text-sm">68,245.00</td>
-                                <td class="px-4 py-2 text-sm loss">-$51.00</td>
-                                <td class="px-4 py-2 text-sm">
-                                    <button class="cyber-button-primary px-2 py-1 text-xs mr-1">CLOSE</button>
-                                    <button class="cyber-button px-2 py-1 text-xs">EDIT</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- Mobile Market Overview -->
+            <div class="md:hidden px-4 py-3 overflow-x-auto">
+                <div class="text-sm font-medium mb-2">FAVORITES</div>
+                <div class="flex space-x-3" id="mobileSymbolList">
+                    <!-- Mobile symbol cards will be added here -->
                 </div>
             </div>
-            <!-- Sticky Mobile Navigation -->
-<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--panel)] border-t border-[var(--border)] py-2 z-50 flex justify-around items-center">
-    <a href="index.html" class="flex flex-col items-center">
-        <i data-feather="activity" class="w-5 h-5"></i>
-        <span class="text-xs mt-1">Trade</span>
-    </a>
-    <a href="positions.html" class="flex flex-col items-center">
-        <i data-feather="briefcase" class="w-5 h-5"></i>
-        <span class="text-xs mt-1">Positions</span>
-    </a>
-    <a href="history.html" class="flex flex-col items-center">
-        <i data-feather="clock" class="w-5 h-5"></i>
-        <span class="text-xs mt-1">History</span>
-    </a>
-    <a href="account.html" class="flex flex-col items-center">
-        <i data-feather="user" class="w-5 h-5"></i>
-        <span class="text-xs mt-1">Account</span>
-    </a>
-</nav>
+            
             <!-- Mobile Trade Panel -->
             <div class="md:hidden bg-[var(--panel)] border-t border-[var(--border)] p-3">
                 <div class="flex justify-between mb-3">
-                    <div class="text-sm font-medium">EUR/USD</div>
-                    <div class="font-display">1.0845</div>
+                    <div class="text-sm font-medium" id="mobileSelectedSymbol">EUR/USD</div>
+                    <div class="font-display" id="mobileSelectedPrice">1.0845</div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <div class="text-xs text-[var(--text-dim)] mb-1">VOLUME (LOTS)</div>
-                        <input type="number" value="0.1" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
+                        <input type="number" id="mobileTradeVolume" value="0.1" min="0.01" step="0.01" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
                     </div>
                     <div>
                         <div class="text-xs text-[var(--text-dim)] mb-1">TYPE</div>
-                        <select class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
-                            <option>Market</option>
-                            <option>Limit</option>
-                            <option>Stop</option>
+                        <select id="orderType" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
+                            <option value="market">Market</option>
+                            <option value="limit">Limit</option>
+                            <option value="stop">Stop</option>
                         </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3 mt-3">
-                    <button class="cyber-button-primary py-2 rounded text-sm font-medium">BUY</button>
-                    <button class="cyber-button-secondary py-2 rounded text-sm font-medium">SELL</button>
+                    <button onclick="executeTrade('buy')" class="cyber-button-primary py-2 rounded text-sm font-medium">BUY</button>
+                    <button onclick="executeTrade('sell')" class="cyber-button-secondary py-2 rounded text-sm font-medium">SELL</button>
                 </div>
             </div>
         </main>
     </div>
-<!-- Mobile Navigation -->
-<nav class="md:hidden flex justify-around items-center bg-[var(--panel)] border-t border-[var(--border)] py-2">
-    <div onclick="window.location.href='index.html'" class="flex flex-col items-center active-tab">
-        <i data-feather="activity" class="w-5 h-5"></i>
-        <span class="text-xs mt-1">TRADE</span>
-    </div>
-    <div onclick="window.location.href='positions.html'" class="flex flex-col items-center">
-        <i data-feather="briefcase" class="w-5 h-5"></i>
-        <span class="text-xs mt-1">POSITIONS</span>
-    </div>
-    <div onclick="window.location.href='history.html'" class="flex flex-col items-center">
-        <i data-feather="clock" class="w-5 h-5"></i>
-        <span class="text-xs mt-1">HISTORY</span>
-    </div>
-    <div class="flex flex-col items-center">
-        <i data-feather="user" class="w-5 h-5"></i>
-        <span class="text-xs mt-1">ACCOUNT</span>
-    </div>
-</nav>
+
+    <!-- Mobile Navigation -->
+    <nav class="md:hidden flex justify-around items-center bg-[var(--panel)] border-t border-[var(--border)] py-2">
+        <div onclick="window.location.href='index.html'" class="flex flex-col items-center active-tab">
+            <i data-feather="activity" class="w-5 h-5"></i>
+            <span class="text-xs mt-1">TRADE</span>
+        </div>
+        <div onclick="window.location.href='positions.html'" class="flex flex-col items-center">
+            <i data-feather="briefcase" class="w-5 h-5"></i>
+            <span class="text-xs mt-1">POSITIONS</span>
+        </div>
+        <div onclick="window.location.href='history.html'" class="flex flex-col items-center">
+            <i data-feather="clock" class="w-5 h-5"></i>
+            <span class="text-xs mt-1">HISTORY</span>
+        </div>
+        <div class="flex flex-col items-center">
+            <i data-feather="user" class="w-5 h-5"></i>
+            <span class="text-xs mt-1">ACCOUNT</span>
+        </div>
+    </nav>
 
     <script>
         // Initialize Feather Icons
         feather.replace();
+        
+        // Trading data with real market symbols
+        const symbols = [
+            // Forex
+            { name: "EUR/USD", type: "FX", price: 1.0845, change: 0.12, spread: 0.2, high: 1.0856, low: 1.0832, provider: "OANDA:FX_EURUSD", exchange: "FX_IDC", category: "forex" },
+            { name: "GBP/USD", type: "FX", price: 1.2650, change: -0.05, spread: 0.3, high: 1.2672, low: 1.2638, provider: "OANDA:FX_GBPUSD", exchange: "FX_IDC", category: "forex" },
+            { name: "USD/JPY", type: "FX", price: 151.35, change: 0.24, spread: 0.4, high: 151.48, low: 151.12, provider: "OANDA:FX_USDJPY", exchange: "FX_IDC", category: "forex" },
+            { name: "AUD/USD", type: "FX", price: 0.6580, change: -0.18, spread: 0.3, high: 0.6595, low: 0.6565, provider: "OANDA:FX_AUDUSD", exchange: "FX_IDC", category: "forex" },
+            { name: "USD/CAD", type: "FX", price: 1.3520, change: 0.15, spread: 0.3, high: 1.3535, low: 1.3505, provider: "OANDA:FX_USDCAD", exchange: "FX_IDC", category: "forex" },
+            
+            // Crypto
+            { name: "BTC/USD", type: "CR", price: 68245.00, change: -1.32, spread: 12.5, high: 69210.50, low: 67890.25, provider: "BINANCE:BTCUSDT", exchange: "BINANCE", category: "crypto" },
+            { name: "ETH/USD", type: "CR", price: 3450.25, change: 2.14, spread: 5.2, high: 3480.75, low: 3420.50, provider: "BINANCE:ETHUSDT", exchange: "BINANCE", category: "crypto" },
+            { name: "XRP/USD", type: "CR", price: 0.5120, change: 1.25, spread: 0.0005, high: 0.5150, low: 0.5100, provider: "BINANCE:XRPUSDT", exchange: "BINANCE", category: "crypto" },
+            { name: "SOL/USD", type: "CR", price: 185.50, change: 3.45, spread: 0.15, high: 187.25, low: 183.75, provider: "BINANCE:SOLUSDT", exchange: "BINANCE", category: "crypto" },
+            { name: "ADA/USD", type: "CR", price: 0.4625, change: -0.75, spread: 0.0005, high: 0.4650, low: 0.4600, provider: "BINANCE:ADAUSDT", exchange: "BINANCE", category: "crypto" },
+            
+            // Stocks
+            { name: "AAPL", type: "ST", price: 172.50, change: -0.45, spread: 0.15, high: 173.20, low: 171.85, provider: "NASDAQ:AAPL", exchange: "NASDAQ", category: "stocks" },
+            { name: "TSLA", type: "ST", price: 175.30, change: 1.25, spread: 0.18, high: 176.50, low: 174.20, provider: "NASDAQ:TSLA", exchange: "NASDAQ", category: "stocks" },
+            { name: "MSFT", type: "ST", price: 425.75, change: 0.75, spread: 0.12, high: 426.50, low: 424.25, provider: "NASDAQ:MSFT", exchange: "NASDAQ", category: "stocks" },
+            { name: "AMZN", type: "ST", price: 178.90, change: -0.35, spread: 0.15, high: 179.50, low: 178.25, provider: "NASDAQ:AMZN", exchange: "NASDAQ", category: "stocks" },
+            { name: "GOOGL", type: "ST", price: 152.25, change: 0.95, spread: 0.10, high: 152.75, low: 151.50, provider: "NASDAQ:GOOGL", exchange: "NASDAQ", category: "stocks" },
+            
+            // Indices
+            { name: "US500", type: "IDX", price: 5200.75, change: 0.75, spread: 0.25, high: 5210.25, low: 5195.50, provider: "OANDA:US500", exchange: "TVC", category: "indices" },
+            { name: "US30", type: "IDX", price: 39250.40, change: -0.35, spread: 1.0, high: 39320.75, low: 39210.25, provider: "OANDA:US30", exchange: "TVC", category: "indices" },
+            { name: "NAS100", type: "IDX", price: 18250.60, change: 1.25, spread: 1.5, high: 18275.25, low: 18220.50, provider: "OANDA:NAS100", exchange: "TVC", category: "indices" },
+            
+            // Commodities
+            { name: "XAU/USD", type: "MT", price: 2185.50, change: 0.87, spread: 0.5, high: 2188.75, low: 2178.30, provider: "OANDA:MT_XAUUSD", exchange: "TVC", category: "commodities" },
+            { name: "XAG/USD", type: "MT", price: 24.35, change: 1.25, spread: 0.05, high: 24.50, low: 24.20, provider: "OANDA:MT_XAGUSD", exchange: "TVC", category: "commodities" },
+            { name: "OIL/USD", type: "MT", price: 85.25, change: -0.75, spread: 0.10, high: 85.75, low: 84.90, provider: "OANDA:MT_OILUSD", exchange: "TVC", category: "commodities" }
+        ];
+        
         let openTrades = [];
-let tradeIdCounter = 1;
-
-function openTrade(symbol, type, volume, price) {
-    const sl = type === 'buy' ? (price * 0.99).toFixed(4) : (price * 1.01).toFixed(4); // 1% SL
-    const tp = type === 'buy' ? (price * 1.01).toFixed(4) : (price * 0.99).toFixed(4); // 1% TP
-
-    const trade = {
-        id: tradeIdCounter++,
-        symbol,
-        type,
-        volume: parseFloat(volume),
-        openPrice: parseFloat(price.toFixed(4)),
-        currentPrice: parseFloat(price.toFixed(4)),
-        sl,
-        tp,
-        pl: 0,
-        timestamp: new Date().toLocaleTimeString()
-    };
-
-    openTrades.push(trade);
-    updateTradeTable();
-}
-function updateTradeTable() {
-    const tbody = document.querySelector('table tbody');
-    if (!tbody) return;
-
-    tbody.innerHTML = ''; // Clear existing rows
-
-    openTrades.forEach(trade => {
-        const tr = document.createElement('tr');
-
-        tr.innerHTML = `
-            <td class="px-4 py-2 text-sm font-mono">#${trade.id}</td>
-            <td class="px-4 py-2 text-sm">${trade.symbol}</td>
-            <td class="px-4 py-2 text-sm">${trade.volume}</td>
-            <td class="px-4 py-2 text-sm">${trade.sl} / ${trade.tp}</td>
-            <td class="px-4 py-2 text-sm">${trade.openPrice}</td>
-            <td class="px-4 py-2 text-sm">${trade.currentPrice}</td>
-            <td class="px-4 py-2 text-sm ${parseFloat(trade.pl) >= 0 ? 'profit' : 'loss'}">${parseFloat(trade.pl) >= 0 ? '+' : ''}${trade.pl}</td>
-            <td class="px-4 py-2 text-sm">
-                <button onclick="closeTrade(${trade.id})" class="cyber-button-primary px-2 py-1 text-xs mr-1">CLOSE</button>
-                <button class="cyber-button px-2 py-1 text-xs">EDIT</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-    function handleTrade(type) {
-    const symbol = document.querySelector('.font-display.font-medium').textContent;
-    const volumeInput = document.querySelector('input[type=number]');
-    if (!volumeInput) return;
-
-    const volume = parseFloat(volumeInput.value);
-    const priceCard = [...document.querySelectorAll('.symbol-card')]
-        .find(card => card.querySelector('.font-medium')?.textContent === symbol);
-
-    if (!priceCard) return;
-
-    const price = parseFloat(priceCard.querySelector('.font-display').textContent.replace(/,/g, ''));
-    if (!isNaN(price) && volume > 0) {
-        openTrade(symbol, type, volume, price);
-    }
-}
-
-    function closeTrade(id) {
-    const index = openTrades.findIndex(trade => trade.id === id);
-    if (index !== -1) {
-        const trade = openTrades[index];
-        const pl = parseFloat(trade.pl);
-
-        // Update balance/equity
-        updateBalance(pl);
-
-        // Remove trade
-        openTrades.splice(index, 1);
-        updateTradeTable();
-    }
-}
-function updateBalance(amount) {
-    const equityElements = document.querySelectorAll('.font-display.font-bold');
-    equityElements.forEach(el => {
-        if (el.textContent.includes('$')) {
-            let currentValue = parseFloat(el.textContent.replace(/[^0-9.]/g, ''));
-            let newValue = currentValue + amount;
-            el.textContent = `$${newValue.toFixed(2)}`;
+        let tradeIdCounter = 1;
+        let currentSymbol = "EUR/USD";
+        let currentTimeframe = "60";
+        let tradingViewWidget = null;
+        let priceUpdateInterval;
+        let plUpdateInterval;
+        let priceSocket;
+        let currentTab = 'favorites';
+        
+        // Initialize the app
+        function initApp() {
+            populateSymbolList();
+            updateCurrentSymbolInfo();
+            initTradingView();
+            updatePrices();
+            updatePositionsCount();
+            
+            // Connect to real-time price updates
+            connectToPriceFeed();
+            
+            // Set interval for position P/L updates
+            plUpdateInterval = setInterval(updatePositionsPL, 2000);
+            
+            // Load initial prices from real APIs
+            fetchRealPrices();
         }
-    });
-}
-
-
-    updateMobileEquity(); // Update equity shown in mobile view
-}
+        
+        // Connect to real-time price feed
+        function connectToPriceFeed() {
+            // In a real application, this would connect to a WebSocket API
+            // For demo purposes, we'll simulate real-time updates
+            priceSocket = {
+                close: function() {
+                    clearInterval(priceUpdateInterval);
+                }
+            };
+            
+            priceUpdateInterval = setInterval(() => {
+                updatePrices();
+                fetchRealPrices();
+            }, 1500);
+        }
+        
+        // Fetch real prices from APIs
+        function fetchRealPrices() {
+            // Forex API (free tier)
+            fetch('https://api.exchangerate-api.com/v4/latest/USD')
+                .then(response => response.json())
+                .then(data => {
+                    // Update forex pairs
+                    if (data.rates) {
+                        updateSymbolPrice('EUR/USD', 1 / data.rates.EUR);
+                        updateSymbolPrice('GBP/USD', 1 / data.rates.GBP);
+                        updateSymbolPrice('USD/JPY', data.rates.JPY);
+                        updateSymbolPrice('AUD/USD', 1 / data.rates.AUD);
+                        updateSymbolPrice('USD/CAD', data.rates.CAD);
+                    }
+                })
+                .catch(error => console.error('Error fetching forex data:', error));
+            
+            // Crypto API (CoinGecko free tier)
+            fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,ripple,solana,cardano&vs_currencies=usd')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.bitcoin) updateSymbolPrice('BTC/USD', data.bitcoin.usd);
+                    if (data.ethereum) updateSymbolPrice('ETH/USD', data.ethereum.usd);
+                    if (data.ripple) updateSymbolPrice('XRP/USD', data.ripple.usd);
+                    if (data.solana) updateSymbolPrice('SOL/USD', data.solana.usd);
+                    if (data.cardano) updateSymbolPrice('ADA/USD', data.cardano.usd);
+                })
+                .catch(error => console.error('Error fetching crypto data:', error));
+            
+            // Stocks API (Alpha Vantage free tier)
+            // Note: In a real app, you'd need to handle API keys properly
+            const stocks = ['AAPL', 'TSLA', 'MSFT', 'AMZN', 'GOOGL'];
+            stocks.forEach(stock => {
+                fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock}&apikey=demo`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data['Global Quote'] && data['Global Quote']['05. price']) {
+                            updateSymbolPrice(stock, parseFloat(data['Global Quote']['05. price']));
+                        }
+                    })
+                    .catch(error => console.error(`Error fetching ${stock} data:`, error));
+            });
+        }
+        
+        // Update symbol price
+        function updateSymbolPrice(symbolName, newPrice) {
+            const symbolIndex = symbols.findIndex(s => s.name === symbolName);
+            if (symbolIndex !== -1) {
+                // Calculate percentage change
+                const oldPrice = symbols[symbolIndex].price;
+                const change = ((newPrice - oldPrice) / oldPrice * 100).toFixed(2);
+                
+                // Update symbol data
+                symbols[symbolIndex].price = newPrice;
+                symbols[symbolIndex].change = parseFloat(change);
+                
+                // Update high/low
+                if (newPrice > symbols[symbolIndex].high) {
+                    symbols[symbolIndex].high = newPrice;
+                }
+                if (newPrice < symbols[symbolIndex].low) {
+                    symbols[symbolIndex].low = newPrice;
+                }
+                
+                // Update UI if this is the current symbol
+                if (currentSymbol === symbolName) {
+                    updateCurrentSymbolInfo();
+                }
+                
+                // Update positions that use this symbol
+                updatePositionsPL();
+            }
+        }
+        
+        // Populate symbol list
+        function populateSymbolList() {
+            const symbolList = document.getElementById('symbolList');
+            const mobileSymbolList = document.getElementById('mobileSymbolList');
+            
+            symbolList.innerHTML = '';
+            mobileSymbolList.innerHTML = '';
+            
+            // Filter symbols based on current tab
+            let filteredSymbols = symbols;
+            if (currentTab === 'favorites') {
+                // In a real app, you'd have a favorites system
+                filteredSymbols = symbols.slice(0, 8); // Just show first 8 as "favorites"
+            } else if (currentTab === 'forex') {
+                filteredSymbols = symbols.filter(s => s.category === 'forex');
+            } else if (currentTab === 'crypto') {
+                filteredSymbols = symbols.filter(s => s.category === 'crypto');
+            } else if (currentTab === 'stocks') {
+                filteredSymbols = symbols.filter(s => s.category === 'stocks');
+            }
+            
+            filteredSymbols.forEach(symbol => {
+                // Desktop symbol card
+                const symbolCard = document.createElement('div');
+                symbolCard.className = 'symbol-card p-3 rounded flex justify-between items-center cyber-border transition-all duration-200 cursor-pointer';
+                symbolCard.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
+                            <span class="text-xs">${symbol.type}</span>
+                        </div>
+                        <div>
+                            <div class="font-medium">${symbol.name}</div>
+                            <div class="text-xs text-[var(--text-dim)]">Spread: ${symbol.spread}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-display">${symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
+                        <div class="text-xs ${symbol.change >= 0 ? 'profit' : 'loss'}">${symbol.change >= 0 ? '+' : ''}${symbol.change}%</div>
+                    </div>
+                `;
+                symbolCard.addEventListener('click', () => selectSymbol(symbol));
+                symbolList.appendChild(symbolCard);
+                
+                // Mobile symbol card
+                const mobileSymbolCard = document.createElement('div');
+                mobileSymbolCard.className = 'mobile-market-card p-3 bg-[var(--panel)] rounded cyber-border min-w-[140px]';
+                mobileSymbolCard.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
+                            <span class="text-xs">${symbol.type}</span>
+                        </div>
+                        <div class="text-sm">${symbol.name}</div>
+                    </div>
+                    <div class="text-xs text-[var(--text-dim)] mt-1">Spread: ${symbol.spread}</div>
+                    <div class="font-display text-lg mt-1">${symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
+                    <div class="text-xs ${symbol.change >= 0 ? 'profit' : 'loss'} mt-1">${symbol.change >= 0 ? '+' : ''}${symbol.change}%</div>
+                    <div class="text-xs text-[var(--text-dim)] mt-1">Low: ${symbol.low.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
+                    <div class="text-xs text-[var(--text-dim)]">High: ${symbol.high.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
+                `;
+                mobileSymbolCard.addEventListener('click', () => selectSymbol(symbol));
+                mobileSymbolList.appendChild(mobileSymbolCard);
+            });
+        }
+        
+        // Filter symbols based on search input
+        function filterSymbols() {
+            const searchInput = document.getElementById('symbolSearch');
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            const symbolCards = document.querySelectorAll('.symbol-card');
+            symbolCards.forEach(card => {
+                const symbolName = card.querySelector('.font-medium').textContent.toLowerCase();
+                if (symbolName.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Select symbol
+        function selectSymbol(symbol) {
+            currentSymbol = symbol.name;
+            
+            // Update UI
+            document.getElementById('currentSymbol').textContent = symbol.name;
+            document.getElementById('symbolType').textContent = symbol.type;
+            document.getElementById('symbolProvider').textContent = symbol.provider;
+            document.getElementById('selectedSymbol').textContent = symbol.name;
+            document.getElementById('selectedPrice').textContent = symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+            document.getElementById('mobileSelectedSymbol').textContent = symbol.name;
+            document.getElementById('mobileSelectedPrice').textContent = symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+            
+            // Update TradingView chart
+            if (tradingViewWidget) {
+                tradingViewWidget.chart().setSymbol(symbol.exchange + ':' + symbol.name.replace('/', ''));
+            }
+            
+            // Update current symbol info
+            updateCurrentSymbolInfo();
+        }
+        
+        // Update current symbol info
+        function updateCurrentSymbolInfo() {
+            const symbol = symbols.find(s => s.name === currentSymbol);
+            if (!symbol) return;
+            
+            document.getElementById('bidPrice').textContent = (symbol.price - (symbol.spread / 2)).toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+            document.getElementById('askPrice').textContent = (symbol.price + (symbol.spread / 2)).toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+            document.getElementById('spreadValue').textContent = symbol.spread;
+            document.getElementById('dailyChange').textContent = `${symbol.change >= 0 ? '+' : ''}${symbol.change}%`;
+            document.getElementById('dailyChange').className = symbol.change >= 0 ? 'profit' : 'loss';
+            document.getElementById('dailyHigh').textContent = symbol.high.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+            document.getElementById('dailyLow').textContent = symbol.low.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+        }
+        
         // Initialize TradingView Widget
         function initTradingView() {
-            new TradingView.widget({
+            if (typeof TradingView === 'undefined') {
+                console.error('TradingView library not loaded');
+                return;
+            }
+            
+            const symbol = symbols.find(s => s.name === currentSymbol);
+            
+            tradingViewWidget = new TradingView.widget({
                 "autosize": true,
-                "symbol": "FX:EURUSD",
-                "interval": "60",
+                "symbol": symbol.exchange + ":" + symbol.name.replace('/', ''),
+                "interval": currentTimeframe,
                 "timezone": "Etc/UTC",
                 "theme": "dark",
                 "style": "1",
@@ -936,15 +973,296 @@ function updateBalance(amount) {
                     "scalesProperties.lineColor": "#25253a"
                 }
             });
-            
         }
         
+        // Change timeframe
+        function changeTimeframe(timeframe) {
+            currentTimeframe = timeframe;
+            
+            // Update active tab
+            document.querySelectorAll('.flex.space-x-2 > div').forEach(el => {
+                el.classList.remove('active-tab');
+            });
+            event.target.classList.add('active-tab');
+            
+            if (tradingViewWidget) {
+                tradingViewWidget.chart().setResolution(timeframe);
+            }
+        }
         
-        // Wait for TradingView script to load
-        if (typeof TradingView !== 'undefined') {
-            initTradingView();
-        } else {
-            window.addEventListener('load', initTradingView);
+        // Execute trade
+        function executeTrade(type) {
+            const symbol = symbols.find(s => s.name === currentSymbol);
+            if (!symbol) return;
+            
+            const volume = parseFloat(document.getElementById('tradeVolume').value) || 
+                          parseFloat(document.getElementById('mobileTradeVolume').value) || 0.1;
+            
+            const orderType = document.getElementById('orderType') ? 
+                             document.getElementById('orderType').value : 'market';
+            
+            let price;
+            if (orderType === 'market') {
+                price = type === 'buy' ? 
+                    (symbol.price + (symbol.spread / 2)) : 
+                    (symbol.price - (symbol.spread / 2));
+            } else {
+                // For limit/stop orders, we'd need additional UI for the entry price
+                price = type === 'buy' ? 
+                    (symbol.price - (symbol.spread / 2)) : 
+                    (symbol.price + (symbol.spread / 2));
+            }
+            
+            const sl = document.getElementById('stopLoss').value || 
+                      (type === 'buy' ? (price * 0.99).toFixed(4) : (price * 1.01).toFixed(4));
+            
+            const tp = document.getElementById('takeProfit').value || 
+                      (type === 'buy' ? (price * 1.01).toFixed(4) : (price * 0.99).toFixed(4));
+            
+            const trade = {
+                id: tradeIdCounter++,
+                symbol: currentSymbol,
+                type,
+                volume,
+                openPrice: parseFloat(price.toFixed(4)),
+                currentPrice: parseFloat(price.toFixed(4)),
+                sl: parseFloat(sl),
+                tp: parseFloat(tp),
+                pl: 0,
+                timestamp: new Date().toLocaleTimeString(),
+                symbolType: symbol.type,
+                orderType: orderType,
+                status: orderType === 'market' ? 'open' : 'pending'
+            };
+            
+            openTrades.push(trade);
+            updatePositionsTable();
+            updatePositionsCount();
+            
+            // Add visual feedback
+            const button = event.target;
+            button.classList.add('trade-executed');
+            setTimeout(() => {
+                button.classList.remove('trade-executed');
+            }, 500);
+            
+            // Update balance/equity (simulate margin usage)
+            updateBalanceAndEquity();
+            
+            // Show trade confirmation
+            showTradeNotification(trade);
+        }
+        
+        // Show trade notification
+        function showTradeNotification(trade) {
+            const notification = document.createElement('div');
+            notification.className = `fixed bottom-4 right-4 p-3 rounded cyber-border ${trade.type === 'buy' ? 'bg-green-900' : 'bg-purple-900'} text-white z-50`;
+            notification.innerHTML = `
+                <div class="font-bold">Trade Executed</div>
+                <div class="text-sm">${trade.type.toUpperCase()} ${trade.volume} ${trade.symbol} @ ${trade.openPrice}</div>
+                <div class="text-xs">Order ID: #${trade.id}</div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Close trade
+        function closeTrade(id) {
+            const index = openTrades.findIndex(trade => trade.id === id);
+            if (index !== -1) {
+                const trade = openTrades[index];
+                
+                // Update balance with P/L
+                const balanceElement = document.getElementById('walletBalance');
+                let balance = parseFloat(balanceElement.textContent.replace(/[^0-9.]/g, ''));
+                balance += trade.pl;
+                balanceElement.textContent = `$${balance.toFixed(2)}`;
+                
+                // Remove trade
+                openTrades.splice(index, 1);
+                updatePositionsTable();
+                updatePositionsCount();
+                updateBalanceAndEquity();
+                
+                // Show close notification
+                showCloseNotification(trade);
+            }
+        }
+        
+        // Show close notification
+        function showCloseNotification(trade) {
+            const notification = document.createElement('div');
+            notification.className = `fixed bottom-4 right-4 p-3 rounded cyber-border ${trade.pl >= 0 ? 'bg-green-900' : 'bg-red-900'} text-white z-50`;
+            notification.innerHTML = `
+                <div class="font-bold">Position Closed</div>
+                <div class="text-sm">${trade.symbol} P/L: ${trade.pl >= 0 ? '+' : ''}$${trade.pl.toFixed(2)}</div>
+                <div class="text-xs">Order ID: #${trade.id}</div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Update positions table
+        function updatePositionsTable() {
+            const tbody = document.getElementById('positionsTable');
+            if (!tbody) return;
+            
+            tbody.innerHTML = '';
+            
+            openTrades.forEach(trade => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-[var(--border)] position-highlight';
+                
+                tr.innerHTML = `
+                    <td class="px-4 py-2 text-sm font-mono">#${trade.id}</td>
+                    <td class="px-4 py-2 text-sm">${trade.symbol}</td>
+                    <td class="px-4 py-2 text-sm">${trade.volume}</td>
+                    <td class="px-4 py-2 text-sm">${trade.sl.toFixed(trade.symbolType === 'FX' ? 4 : 2)} / ${trade.tp.toFixed(trade.symbolType === 'FX' ? 4 : 2)}</td>
+                    <td class="px-4 py-2 text-sm">${trade.openPrice.toFixed(trade.symbolType === 'FX' ? 4 : 2)}</td>
+                    <td class="px-4 py-2 text-sm">${trade.currentPrice.toFixed(trade.symbolType === 'FX' ? 4 : 2)}</td>
+                    <td class="px-4 py-2 text-sm ${trade.pl >= 0 ? 'profit' : 'loss'}">${trade.pl >= 0 ? '+' : ''}${trade.pl.toFixed(2)}</td>
+                    <td class="px-4 py-2 text-sm">
+                        <button onclick="closeTrade(${trade.id})" class="cyber-button-primary px-2 py-1 text-xs mr-1">CLOSE</button>
+                        <button class="cyber-button px-2 py-1 text-xs">EDIT</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        // Update positions count
+        function updatePositionsCount() {
+            const countElement = document.getElementById('positionsCount');
+            if (countElement) {
+                const openPositions = openTrades.filter(t => t.status === 'open').length;
+                const pendingPositions = openTrades.filter(t => t.status === 'pending').length;
+                
+                let text = '';
+                if (openPositions > 0 && pendingPositions > 0) {
+                    text = `${openPositions} open, ${pendingPositions} pending`;
+                } else if (openPositions > 0) {
+                    text = `${openPositions} position${openPositions !== 1 ? 's' : ''}`;
+                } else if (pendingPositions > 0) {
+                    text = `${pendingPositions} pending`;
+                } else {
+                    text = '0 positions';
+                }
+                
+                countElement.textContent = text;
+            }
+        }
+        
+        // Update positions P/L
+        function updatePositionsPL() {
+            openTrades.forEach(trade => {
+                const symbol = symbols.find(s => s.name === trade.symbol);
+                if (symbol) {
+                    // Update current price from live data
+                    trade.currentPrice = trade.type === 'buy' ? 
+                        (symbol.price + (symbol.spread / 2)) : 
+                        (symbol.price - (symbol.spread / 2));
+                    
+                    // Calculate P/L
+                    const priceDifference = trade.type === 'buy' ? 
+                        (trade.currentPrice - trade.openPrice) : 
+                        (trade.openPrice - trade.currentPrice);
+                    
+                    // Different calculation for different asset types
+                    if (trade.symbolType === 'FX') {
+                        trade.pl = priceDifference * trade.volume * 10000; // Standard lot size
+                    } else if (trade.symbolType === 'CR') {
+                        trade.pl = priceDifference * trade.volume;
+                    } else {
+                        // Stocks, indices, etc.
+                        trade.pl = priceDifference * trade.volume * 100; // Assuming 100 shares per lot
+                    }
+                    
+                    // Check for SL/TP hits
+                    if (trade.status === 'open') {
+                        if ((trade.type === 'buy' && trade.currentPrice <= trade.sl) || 
+                            (trade.type === 'sell' && trade.currentPrice >= trade.sl)) {
+                            // Stop loss hit
+                            closeTrade(trade.id);
+                        } else if ((trade.type === 'buy' && trade.currentPrice >= trade.tp) || 
+                                   (trade.type === 'sell' && trade.currentPrice <= trade.tp)) {
+                            // Take profit hit
+                            closeTrade(trade.id);
+                        }
+                    }
+                }
+            });
+            
+            // Update table if there are open positions
+            if (openTrades.length > 0) {
+                updatePositionsTable();
+                updateBalanceAndEquity();
+            }
+        }
+        
+        // Update balance and equity
+        function updateBalanceAndEquity() {
+            const balanceElement = document.getElementById('walletBalance');
+            const equityElement = document.getElementById('equityValue');
+            const plElement = document.getElementById('plValue');
+            
+            let balance = parseFloat(balanceElement.textContent.replace(/[^0-9.]/g, ''));
+            let totalPL = 0;
+            
+            // Calculate total P/L from open positions
+            openTrades.forEach(trade => {
+                if (trade.status === 'open') {
+                    totalPL += trade.pl;
+                }
+            });
+            
+            // Update equity (balance + P/L)
+            const equity = balance + totalPL;
+            
+            // Update margin (simplified calculation)
+            const margin = openTrades.reduce((sum, trade) => {
+                if (trade.status === 'open') {
+                    return sum + (trade.volume * (trade.symbolType === 'FX' ? 1000 : 100));
+                }
+                return sum;
+            }, 0);
+            
+            // Update UI
+            equityElement.textContent = `$${equity.toFixed(2)}`;
+            plElement.textContent = `${totalPL >= 0 ? '+' : ''}$${totalPL.toFixed(2)}`;
+            plElement.className = totalPL >= 0 ? 'font-medium profit' : 'font-medium loss';
+            document.getElementById('marginValue').textContent = `$${margin.toFixed(2)}`;
+        }
+        
+        // Toggle search bar
+        function toggleSearch() {
+            const searchBar = document.getElementById('searchBar');
+            searchBar.classList.toggle('hidden');
+            
+            if (!searchBar.classList.contains('hidden')) {
+                document.getElementById('symbolSearch').focus();
+            }
+        }
+        
+        // Switch between tabs
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update active tab
+            document.querySelectorAll('.flex.border-b div').forEach(el => {
+                el.classList.remove('active-tab');
+                el.classList.add('text-[var(--text-dim)]');
+            });
+            event.target.classList.add('active-tab');
+            event.target.classList.remove('text-[var(--text-dim)]');
+            
+            // Repopulate symbol list
+            populateSymbolList();
         }
         
         // Toggle mobile menu
@@ -953,164 +1271,56 @@ function updateBalance(amount) {
             menu.classList.toggle('hidden');
         }
         
-        // Simulate real-time updates with more realistic price movements
+        // Update prices (simulate market movement)
         function updatePrices() {
-    const priceElements = document.querySelectorAll('.symbol-card, .mobile-market-card');
-    priceElements.forEach(card => {
-        // Prevent interfering with TradingView chart
-        if (card.closest('#tradingview-chart')) {
-            console.warn("Skipping TradingView container");
-            return;
-        }
-
-        const priceElement = card.querySelector('.font-display');
-        const changeElement = card.querySelector('.profit, .loss');
-        const symbolElement = card.querySelector('.font-medium');
-
-        if (!priceElement || !changeElement || !symbolElement) {
-            console.warn("Required element missing in card:", card);
-            return;
-        }
-
-        let currentPrice = parseFloat(priceElement.textContent.replace(/,/g, ''));
-        if (isNaN(currentPrice)) {
-            currentPrice = parseFloat(priceElement.textContent);
-        }
-        if (isNaN(currentPrice)) {
-            console.warn("Could not parse price:", priceElement.textContent);
-            return;
-        }
-
-        const symbol = symbolElement.textContent;
-        let volatility = 0.001;
-
-        if (symbol.includes('BTC') || symbol.includes('ETH')) {
-            volatility = 0.01;
-        } else if (symbol.includes('XAU')) {
-            volatility = 0.002;
-        } else if (symbol.includes('/')) {
-            volatility = 0.0005;
-        } else {
-            volatility = 0.005;
-        }
-
-        let change = (Math.random() - 0.5) * 2 * volatility;
-        const currentTrend = changeElement.classList.contains('profit') ? 1 : -1;
-        change += currentTrend * volatility * 0.3;
-        const newPrice = currentPrice * (1 + change);
-        const isPositive = change > 0;
-
-        // Update price display
-        if (currentPrice > 100) {
-            priceElement.textContent = newPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        } else {
-            priceElement.textContent = newPrice.toFixed(4);
-        }
-
-        // Update change percentage
-        const changePercent = (change * 100).toFixed(2);
-        changeElement.textContent = `${changePercent > 0 ? '+' : ''}${changePercent}%`;
-
-        // Update color classes
-        changeElement.classList.remove('profit', 'loss');
-        changeElement.classList.add(isPositive ? 'profit' : 'loss');
-    });
+            // In a real application, this would fetch live prices from an API
+            // For demo purposes, we'll simulate realistic price movements
             
-            // Update P/L in open positions with realistic changes
-             
+            symbols.forEach(symbol => {
+                // Skip updating prices for symbols that we get from real APIs
+                if (symbol.name === 'EUR/USD' || symbol.name === 'GBP/USD' || symbol.name === 'USD/JPY' || 
+                    symbol.name === 'BTC/USD' || symbol.name === 'ETH/USD' || symbol.name === 'AAPL') {
+                    return;
+                }
+                
+                // Simulate price movement based on symbol type volatility
+                let volatility = 0.0005; // Default for FX
+                if (symbol.type === 'CR') volatility = 0.01;
+                else if (symbol.type === 'MT') volatility = 0.002;
+                else if (symbol.type === 'ST') volatility = 0.005;
+                else if (symbol.type === 'IDX') volatility = 0.003;
+                
+                // More realistic price movement with momentum
+                const change = (Math.random() - 0.5) * 2 * volatility * (1 + Math.abs(symbol.change)/100);
+                symbol.price = symbol.price * (1 + change);
+                
+                // Update daily high/low
+                if (symbol.price > symbol.high) symbol.high = symbol.price;
+                if (symbol.price < symbol.low) symbol.low = symbol.price;
+                
+                // Update change percentage (from a base price)
+                const basePrice = symbol.type === 'FX' ? 1.08 : 
+                                symbol.type === 'CR' ? 50000 : 
+                                symbol.type === 'MT' ? 2000 : 100;
+                symbol.change = ((symbol.price - basePrice) / basePrice * 100).toFixed(2);
+            });
             
-            // Update equity and balance with small random changes
-            const equityElements = document.querySelectorAll('.font-display.font-bold');
-            equityElements.forEach(el => {
-                if (el.textContent.includes('$')) {
-                    const currentValue = parseFloat(el.textContent.replace(/[^0-9.]/g, ''));
-                    const change = (Math.random() - 0.5) * 5;
-                    const newValue = currentValue + change;
-                    el.textContent = `$${newValue.toFixed(2)}`;
-                }
-            });
+            // Update current symbol info if it's the selected one
+            updateCurrentSymbolInfo();
+            
+            // Update positions with new prices
+            updatePositionsPL();
         }
         
-        // Update prices every 1.5 seconds for more fluid feel
-        setInterval(updatePrices, 1500);
-        
-        // Tab switching functionality
-        document.querySelectorAll('.flex.border-b div').forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Remove active class from all tabs
-                document.querySelectorAll('.flex.border-b div').forEach(t => {
-                    t.classList.remove('active-tab');
-                    t.classList.add('text-[var(--text-dim)]');
-                });
-                
-                // Add active class to clicked tab
-                this.classList.add('active-tab');
-                this.classList.remove('text-[var(--text-dim)]');
-            });
+        // Clean up when page unloads
+        window.addEventListener('beforeunload', () => {
+            if (priceSocket) priceSocket.close();
+            if (plUpdateInterval) clearInterval(plUpdateInterval);
+            if (priceUpdateInterval) clearInterval(priceUpdateInterval);
         });
         
-        // Mobile tab switching
-        document.querySelectorAll('nav div').forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Remove active class from all tabs
-                document.querySelectorAll('nav div').forEach(t => {
-                    t.classList.remove('active-tab');
-                });
-                
-                // Add active class to clicked tab
-                this.classList.add('active-tab');
-            });
-        });
-        
-        // Symbol selection
-        document.querySelectorAll('.symbol-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const symbol = this.querySelector('.font-medium').textContent;
-                document.querySelector('.font-display.font-medium').textContent = symbol;
-                
-                // Update current symbol info
-                const currentSymbolInfo = document.querySelector('.flex.items-center.justify-between.px-4.py-2');
-                if (currentSymbolInfo) {
-                    const symbolType = this.querySelector('div:nth-child(1) div span').textContent;
-                    currentSymbolInfo.querySelector('div:nth-child(1) div:nth-child(1) span').textContent = symbolType;
-                }
-                
-                // In a real app, we would update the chart here
-                console.log(`Switched to ${symbol} chart`);
-            });
-        });
-        
-        // Add cyberpunk terminal effect to some elements
-        function addTerminalEffect() {
-            const elements = document.querySelectorAll('.font-display, .font-mono');
-            elements.forEach(el => {
-                el.classList.add('text-[var(--primary)]');
-            });
-        }
-        
-        // Initialize terminal effect
-        addTerminalEffect();
-        
-        // Simulate connection status
-        function updateConnectionStatus() {
-            const statusElements = document.querySelectorAll('.pulse');
-            statusElements.forEach(el => {
-                // Randomly change status (90% chance of being live)
-                if (Math.random() > 0.9) {
-                    el.classList.remove('bg-[var(--primary)]');
-                    el.classList.add('bg-[var(--loss)]');
-                    el.textContent = 'OFFLINE';
-                } else {
-                    el.classList.remove('bg-[var(--loss)]');
-                    el.classList.add('bg-[var(--primary)]');
-                    el.textContent = 'LIVE';
-                }
-            });
-        }
-        
-        // Update connection status every 10 seconds
-        setInterval(updateConnectionStatus, 10000);
+        // Initialize the app when the page loads
+        window.addEventListener('load', initApp);
     </script>
-    
 </body>
 </html>
