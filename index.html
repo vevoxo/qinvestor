@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qinvestors Pro - Live Trading</title>
+    <title>QuantumTrader Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://s3.tradingview.com/tv.js"></script>
@@ -26,7 +26,7 @@
             --glow-profit: 0 0 10px rgba(0, 255, 133, 0.3);
             --glow-loss: 0 0 10px rgba(255, 60, 60, 0.3);
         }
-        
+
         body {
             font-family: 'JetBrains Mono', monospace;
             background-color: var(--bg-dark);
@@ -35,66 +35,66 @@
             overflow: hidden;
             margin: 0;
         }
-        
+
         .font-display {
             font-family: 'Orbitron', sans-serif;
         }
-        
+
         .profit {
             color: var(--profit);
         }
-        
+
         .loss {
             color: var(--loss);
         }
-        
+
         .neutral {
             color: var(--text-dim);
         }
-        
+
         .chart-container {
             height: 100%;
             width: 100%;
         }
-        
+
         .symbol-card:hover {
             background-color: var(--panel);
             box-shadow: var(--glow);
             transform: translateY(-1px);
         }
-        
+
         .active-tab {
             color: var(--primary);
             border-bottom: 2px solid var(--primary);
             text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
         }
-        
+
         .dropdown:hover .dropdown-menu {
             display: block;
             animation: fadeIn 0.2s ease-out;
         }
-        
+
         .glow {
             box-shadow: var(--glow);
         }
-        
+
         .glow-secondary {
             box-shadow: var(--glow-secondary);
         }
-        
+
         .glow-profit {
             box-shadow: var(--glow-profit);
         }
-        
+
         .glow-loss {
             box-shadow: var(--glow-loss);
         }
-        
+
         .cyber-border {
             border: 1px solid var(--border);
             position: relative;
         }
-        
+
         .cyber-border::before {
             content: '';
             position: absolute;
@@ -106,64 +106,64 @@
             z-index: -1;
             opacity: 0.5;
         }
-        
+
         .cyber-button {
             background: linear-gradient(135deg, var(--panel) 0%, #1a1a2a 100%);
             border: 1px solid var(--border);
             transition: all 0.2s ease;
         }
-        
+
         .cyber-button:hover {
             background: linear-gradient(135deg, #1a1a2a 0%, #25253a 100%);
             box-shadow: var(--glow);
             transform: translateY(-1px);
         }
-        
+
         .cyber-button-primary {
             background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(0, 240, 255, 0.3) 100%);
             border: 1px solid var(--primary);
         }
-        
+
         .cyber-button-primary:hover {
             background: linear-gradient(135deg, rgba(0, 240, 255, 0.2) 0%, rgba(0, 240, 255, 0.4) 100%);
             box-shadow: var(--glow);
         }
-        
+
         .cyber-button-secondary {
             background: linear-gradient(135deg, rgba(255, 0, 255, 0.1) 0%, rgba(255, 0, 255, 0.3) 100%);
             border: 1px solid var(--secondary);
         }
-        
+
         .cyber-button-secondary:hover {
             background: linear-gradient(135deg, rgba(255, 0, 255, 0.2) 0%, rgba(255, 0, 255, 0.4) 100%);
             box-shadow: var(--glow-secondary);
         }
-        
+
         .pulse {
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
             0% { opacity: 0.7; }
             50% { opacity: 1; }
             100% { opacity: 0.7; }
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         @keyframes scanline {
             0% { transform: translateY(-100%); }
             100% { transform: translateY(100%); }
         }
-        
+
         .scanlines {
             position: relative;
             overflow: hidden;
         }
-        
+
         .scanlines::after {
             content: '';
             position: absolute;
@@ -181,36 +181,36 @@
             pointer-events: none;
             animation: scanline 8s linear infinite;
         }
-        
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: var(--panel);
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 3px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
             background: #00c8d4;
         }
-        
+
         /* Terminal-like blinking cursor */
         .blink {
             animation: blink 1s step-end infinite;
         }
-        
+
         @keyframes blink {
             from, to { opacity: 1; }
             50% { opacity: 0; }
         }
-        
+
         /* Grid pattern */
         .grid-bg {
             background-image: 
@@ -218,7 +218,7 @@
                 linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
             background-size: 20px 20px;
         }
-        
+
         /* Neon flicker effect */
         @keyframes neon-flicker {
             0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
@@ -230,28 +230,28 @@
                 text-shadow: none;
             }
         }
-        
+
         .neon {
             animation: neon-flicker 1.5s infinite alternate;
         }
-        
+
         /* Trade execution animation */
         @keyframes trade-executed {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.2); opacity: 0.8; }
             100% { transform: scale(1); opacity: 1; }
         }
-        
+
         .trade-executed {
             animation: trade-executed 0.5s ease-out;
         }
-        
+
         /* Position highlight */
         .position-highlight {
             position: relative;
             overflow: hidden;
         }
-        
+
         .position-highlight::after {
             content: '';
             position: absolute;
@@ -267,12 +267,31 @@
             );
             animation: highlight 2s ease-out;
         }
-        
+
         @keyframes highlight {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
-        
+
+        /* Notification animation */
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .notification {
+            animation: slideIn 0.3s forwards;
+        }
+
+        .notification.hide {
+            animation: slideOut 0.3s forwards;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             body {
@@ -282,6 +301,19 @@
             .mobile-market-card {
                 min-width: 140px;
             }
+            
+            .mobile-trade-panel {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 50;
+                box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+            }
+            
+            .mobile-chart-container {
+                padding-bottom: 180px;
+            }
         }
     </style>
 </head>
@@ -290,7 +322,7 @@
     <header class="hidden md:flex items-center justify-between px-6 py-3 bg-[var(--panel)] border-b border-[var(--border)]">
         <div class="flex items-center space-x-8">
             <div class="text-xl font-display font-bold text-[var(--primary)] flex items-center neon">
-                <span class="mr-2">Qinvestor</span>
+                <span class="mr-2">QuantumTrader</span>
                 <span class="text-xs bg-[var(--primary)] text-[var(--bg-dark)] px-2 py-1 rounded-full font-sans">PRO</span>
             </div>
             <div class="flex space-x-6 text-sm">
@@ -316,7 +348,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="flex items-center space-x-6">
             <div class="flex space-x-6">
                 <div class="text-right">
@@ -336,7 +368,7 @@
                     <div id="plValue" class="font-medium profit">+$286.45</div>
                 </div>
             </div>
-            
+
             <div class="relative dropdown">
                 <div class="flex items-center cursor-pointer">
                     <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center glow">
@@ -381,7 +413,7 @@
             </div>
             <i data-feather="menu" class="w-6 h-6" onclick="toggleMobileMenu()"></i>
         </div>
-        
+
         <div class="px-4 py-2 flex justify-between text-xs border-b border-[var(--border)]">
             <div class="text-center">
                 <div class="text-[var(--text-dim)]">BALANCE</div>
@@ -404,7 +436,7 @@
                 <div class="text-[var(--profit)]">∞</div>
             </div>
         </div>
-        
+
         <!-- Mobile Menu (hidden by default) -->
         <div id="mobileMenu" class="hidden bg-[var(--bg-dark)]">
             <div class="px-4 py-3 border-b border-[var(--border)] flex items-center">
@@ -442,12 +474,12 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Search Bar (hidden by default) -->
                 <div id="searchBar" class="hidden mb-3">
                     <input type="text" id="symbolSearch" placeholder="Search markets..." class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--primary)]" oninput="filterSymbols()">
                 </div>
-                
+
                 <div class="flex border-b border-[var(--border)]">
                     <div class="pb-2 px-2 font-medium cursor-pointer active-tab" onclick="switchTab('favorites')">FAVORITES</div>
                     <div class="pb-2 px-2 text-[var(--text-dim)] cursor-pointer" onclick="switchTab('all')">ALL</div>
@@ -455,11 +487,11 @@
                     <div class="pb-2 px-2 text-[var(--text-dim)] cursor-pointer" onclick="switchTab('crypto')">CRYPTO</div>
                     <div class="pb-2 px-2 text-[var(--text-dim)] cursor-pointer" onclick="switchTab('stocks')">STOCKS</div>
                 </div>
-                
+
                 <div class="mt-4 space-y-2" id="symbolList">
                     <!-- Symbol List will be populated by JavaScript -->
                 </div>
-                
+
                 <div class="mt-6">
                     <div class="text-sm font-medium mb-2">QUICK TRADE</div>
                     <div class="cyber-border rounded p-3">
@@ -487,7 +519,7 @@
                 </div>
             </div>
         </aside>
-        
+
         <!-- Main Chart Area -->
         <main class="flex-1 flex flex-col overflow-hidden">
             <!-- Chart Tools (Desktop) -->
@@ -501,7 +533,7 @@
                     <div class="px-3 py-1 text-xs cyber-button cursor-pointer" onclick="changeTimeframe('1D')">1D</div>
                     <div class="px-3 py-1 text-xs cyber-button cursor-pointer" onclick="changeTimeframe('1W')">1W</div>
                 </div>
-                
+
                 <div class="flex space-x-2">
                     <div class="cyber-button p-1 rounded cursor-pointer" title="Line Tool">
                         <i data-feather="minus"></i>
@@ -529,7 +561,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Current Symbol Info -->
             <div class="flex items-center justify-between px-4 py-2 bg-[var(--panel)] border-b border-[var(--border)]">
                 <div class="flex items-center">
@@ -539,7 +571,7 @@
                     <div class="font-display font-medium" id="currentSymbol">EUR/USD</div>
                     <div class="ml-4 text-xs text-[var(--text-dim)]" id="symbolProvider">OANDA:FX_EURUSD</div>
                 </div>
-                
+
                 <div class="flex space-x-6">
                     <div class="text-right">
                         <div class="text-xs text-[var(--text-dim)]">BID</div>
@@ -559,768 +591,774 @@
                     </div>
                     <div class="text-right">
                         <div class="text-xs text-[var(--text-dim)]">HIGH</div>
-                        <div id="dailyHigh">1.0856</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xs text-[var(--text-dim)]">LOW</div>
-                        <div id="dailyLow">1.0832</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- TradingView Chart -->
-            <div class="flex-1 scanlines">
-                <div id="tradingview-chart" class="chart-container"></div>
-            </div>
-            
-            <!-- Trade Panel (Desktop) -->
-            <div class="hidden md:block h-64 bg-[var(--panel)] border-t border-[var(--border)] overflow-y-auto">
-                <div class="p-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="text-sm font-medium">OPEN POSITIONS</div>
-                        <div class="text-xs text-[var(--text-dim)]" id="positionsCount">0 positions</div>
-                    </div>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead>
-                                <tr class="text-xs text-[var(--text-dim)] border-b border-[var(--border)]">
-                                    <th class="px-4 py-2 text-left">ID</th>
-                                    <th class="px-4 py-2 text-left">SYMBOL</th>
-                                    <th class="px-4 py-2 text-left">VOLUME</th>
-                                    <th class="px-4 py-2 text-left">SL/TP</th>
-                                    <th class="px-4 py-2 text-left">OPEN</th>
-                                    <th class="px-4 py-2 text-left">CURRENT</th>
-                                    <th class="px-4 py-2 text-left">P/L</th>
-                                    <th class="px-4 py-2 text-left">ACTIONS</th>
-                                </tr>
-                            </thead>
-                            <tbody id="positionsTable">
-                                <!-- Positions will be added here dynamically -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Mobile Market Overview -->
-            <div class="md:hidden px-4 py-3 overflow-x-auto">
-                <div class="text-sm font-medium mb-2">FAVORITES</div>
-                <div class="flex space-x-3" id="mobileSymbolList">
-                    <!-- Mobile symbol cards will be added here -->
-                </div>
-            </div>
-            
-            <!-- Mobile Trade Panel -->
-            <div class="md:hidden bg-[var(--panel)] border-t border-[var(--border)] p-3">
-                <div class="flex justify-between mb-3">
-                    <div class="text-sm font-medium" id="mobileSelectedSymbol">EUR/USD</div>
-                    <div class="font-display" id="mobileSelectedPrice">1.0845</div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <div class="text-xs text-[var(--text-dim)] mb-1">VOLUME (LOTS)</div>
-                        <input type="number" id="mobileTradeVolume" value="0.1" min="0.01" step="0.01" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
-                    </div>
-                    <div>
-                        <div class="text-xs text-[var(--text-dim)] mb-1">TYPE</div>
-                        <select id="orderType" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
-                            <option value="market">Market</option>
-                            <option value="limit">Limit</option>
-                            <option value="stop">Stop</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3 mt-3">
-                    <button onclick="executeTrade('buy')" class="cyber-button-primary py-2 rounded text-sm font-medium">BUY</button>
-                    <button onclick="executeTrade('sell')" class="cyber-button-secondary py-2 rounded text-sm font-medium">SELL</button>
-                </div>
-            </div>
-        </main>
+        <div id="dailyHigh">1.0856</div>
     </div>
+    <div class="text-right">
+        <div class="text-xs text-[var(--text-dim)]">LOW</div>
+        <div id="dailyLow">1.0832</div>
+    </div>
+</div>
+</div>
 
-    <!-- Mobile Navigation -->
-    <nav class="md:hidden flex justify-around items-center bg-[var(--panel)] border-t border-[var(--border)] py-2">
-        <div onclick="window.location.href='index.html'" class="flex flex-col items-center active-tab">
-            <i data-feather="activity" class="w-5 h-5"></i>
-            <span class="text-xs mt-1">TRADE</span>
-        </div>
-        <div onclick="window.location.href='positions.html'" class="flex flex-col items-center">
-            <i data-feather="briefcase" class="w-5 h-5"></i>
-            <span class="text-xs mt-1">POSITIONS</span>
-        </div>
-        <div onclick="window.location.href='history.html'" class="flex flex-col items-center">
-            <i data-feather="clock" class="w-5 h-5"></i>
-            <span class="text-xs mt-1">HISTORY</span>
-        </div>
-        <div class="flex flex-col items-center">
-            <i data-feather="user" class="w-5 h-5"></i>
-            <span class="text-xs mt-1">ACCOUNT</span>
-        </div>
-    </nav>
+<!-- TradingView Chart -->
+<div class="flex-1 scanlines mobile-chart-container">
+    <div id="tradingview-chart" class="chart-container"></div>
+</div>
 
-    <script>
-        // Initialize Feather Icons
-        feather.replace();
-        
-        // Trading data with real market symbols
-        const symbols = [
-            // Forex
-            { name: "EUR/USD", type: "FX", price: 1.0845, change: 0.12, spread: 0.2, high: 1.0856, low: 1.0832, provider: "OANDA:FX_EURUSD", exchange: "FX_IDC", category: "forex" },
-            { name: "GBP/USD", type: "FX", price: 1.2650, change: -0.05, spread: 0.3, high: 1.2672, low: 1.2638, provider: "OANDA:FX_GBPUSD", exchange: "FX_IDC", category: "forex" },
-            { name: "USD/JPY", type: "FX", price: 151.35, change: 0.24, spread: 0.4, high: 151.48, low: 151.12, provider: "OANDA:FX_USDJPY", exchange: "FX_IDC", category: "forex" },
-            { name: "AUD/USD", type: "FX", price: 0.6580, change: -0.18, spread: 0.3, high: 0.6595, low: 0.6565, provider: "OANDA:FX_AUDUSD", exchange: "FX_IDC", category: "forex" },
-            { name: "USD/CAD", type: "FX", price: 1.3520, change: 0.15, spread: 0.3, high: 1.3535, low: 1.3505, provider: "OANDA:FX_USDCAD", exchange: "FX_IDC", category: "forex" },
-            
-            // Crypto
-            { name: "BTC/USD", type: "CR", price: 68245.00, change: -1.32, spread: 12.5, high: 69210.50, low: 67890.25, provider: "BINANCE:BTCUSDT", exchange: "BINANCE", category: "crypto" },
-            { name: "ETH/USD", type: "CR", price: 3450.25, change: 2.14, spread: 5.2, high: 3480.75, low: 3420.50, provider: "BINANCE:ETHUSDT", exchange: "BINANCE", category: "crypto" },
-            { name: "XRP/USD", type: "CR", price: 0.5120, change: 1.25, spread: 0.0005, high: 0.5150, low: 0.5100, provider: "BINANCE:XRPUSDT", exchange: "BINANCE", category: "crypto" },
-            { name: "SOL/USD", type: "CR", price: 185.50, change: 3.45, spread: 0.15, high: 187.25, low: 183.75, provider: "BINANCE:SOLUSDT", exchange: "BINANCE", category: "crypto" },
-            { name: "ADA/USD", type: "CR", price: 0.4625, change: -0.75, spread: 0.0005, high: 0.4650, low: 0.4600, provider: "BINANCE:ADAUSDT", exchange: "BINANCE", category: "crypto" },
-            
-            // Stocks
-            { name: "AAPL", type: "ST", price: 172.50, change: -0.45, spread: 0.15, high: 173.20, low: 171.85, provider: "NASDAQ:AAPL", exchange: "NASDAQ", category: "stocks" },
-            { name: "TSLA", type: "ST", price: 175.30, change: 1.25, spread: 0.18, high: 176.50, low: 174.20, provider: "NASDAQ:TSLA", exchange: "NASDAQ", category: "stocks" },
-            { name: "MSFT", type: "ST", price: 425.75, change: 0.75, spread: 0.12, high: 426.50, low: 424.25, provider: "NASDAQ:MSFT", exchange: "NASDAQ", category: "stocks" },
-            { name: "AMZN", type: "ST", price: 178.90, change: -0.35, spread: 0.15, high: 179.50, low: 178.25, provider: "NASDAQ:AMZN", exchange: "NASDAQ", category: "stocks" },
-            { name: "GOOGL", type: "ST", price: 152.25, change: 0.95, spread: 0.10, high: 152.75, low: 151.50, provider: "NASDAQ:GOOGL", exchange: "NASDAQ", category: "stocks" },
-            
-            // Indices
-            { name: "US500", type: "IDX", price: 5200.75, change: 0.75, spread: 0.25, high: 5210.25, low: 5195.50, provider: "OANDA:US500", exchange: "TVC", category: "indices" },
-            { name: "US30", type: "IDX", price: 39250.40, change: -0.35, spread: 1.0, high: 39320.75, low: 39210.25, provider: "OANDA:US30", exchange: "TVC", category: "indices" },
-            { name: "NAS100", type: "IDX", price: 18250.60, change: 1.25, spread: 1.5, high: 18275.25, low: 18220.50, provider: "OANDA:NAS100", exchange: "TVC", category: "indices" },
-            
-            // Commodities
-            { name: "XAU/USD", type: "MT", price: 2185.50, change: 0.87, spread: 0.5, high: 2188.75, low: 2178.30, provider: "OANDA:MT_XAUUSD", exchange: "TVC", category: "commodities" },
-            { name: "XAG/USD", type: "MT", price: 24.35, change: 1.25, spread: 0.05, high: 24.50, low: 24.20, provider: "OANDA:MT_XAGUSD", exchange: "TVC", category: "commodities" },
-            { name: "OIL/USD", type: "MT", price: 85.25, change: -0.75, spread: 0.10, high: 85.75, low: 84.90, provider: "OANDA:MT_OILUSD", exchange: "TVC", category: "commodities" }
-        ];
-        
-        let openTrades = [];
-        let tradeIdCounter = 1;
-        let currentSymbol = "EUR/USD";
-        let currentTimeframe = "60";
-        let tradingViewWidget = null;
-        let priceUpdateInterval;
-        let plUpdateInterval;
-        let priceSocket;
-        let currentTab = 'favorites';
-        
-        // Initialize the app
-        function initApp() {
-            populateSymbolList();
-            updateCurrentSymbolInfo();
-            initTradingView();
+<!-- Trade Panel (Desktop) -->
+<div class="hidden md:block h-64 bg-[var(--panel)] border-t border-[var(--border)] overflow-y-auto">
+    <div class="p-4">
+        <div class="flex justify-between items-center mb-4">
+            <div class="text-sm font-medium">OPEN POSITIONS</div>
+            <div class="text-xs text-[var(--text-dim)]" id="positionsCount">0 positions</div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-xs text-[var(--text-dim)] border-b border-[var(--border)]">
+                        <th class="px-4 py-2 text-left">ID</th>
+                        <th class="px-4 py-2 text-left">SYMBOL</th>
+                        <th class="px-4 py-2 text-left">VOLUME</th>
+                        <th class="px-4 py-2 text-left">SL/TP</th>
+                        <th class="px-4 py-2 text-left">OPEN</th>
+                        <th class="px-4 py-2 text-left">CURRENT</th>
+                        <th class="px-4 py-2 text-left">P/L</th>
+                        <th class="px-4 py-2 text-left">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody id="positionsTable">
+                    <!-- Positions will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Market Overview -->
+<div class="md:hidden px-4 py-3 overflow-x-auto">
+    <div class="text-sm font-medium mb-2">FAVORITES</div>
+    <div class="flex space-x-3" id="mobileSymbolList">
+        <!-- Mobile symbol cards will be added here -->
+    </div>
+</div>
+
+<!-- Mobile Trade Panel -->
+<div class="md:hidden bg-[var(--panel)] border-t border-[var(--border)] p-3 mobile-trade-panel">
+    <div class="flex justify-between mb-3">
+        <div class="text-sm font-medium" id="mobileSelectedSymbol">EUR/USD</div>
+        <div class="font-display" id="mobileSelectedPrice">1.0845</div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+        <div>
+            <div class="text-xs text-[var(--text-dim)] mb-1">VOLUME (LOTS)</div>
+            <input type="number" id="mobileTradeVolume" value="0.1" min="0.01" step="0.01" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
+        </div>
+        <div>
+            <div class="text-xs text-[var(--text-dim)] mb-1">TYPE</div>
+            <select id="orderType" class="w-full bg-[var(--bg-dark)] border border-[var(--border)] rounded px-2 py-1 text-sm">
+                <option value="market">Market</option>
+                <option value="limit">Limit</option>
+                <option value="stop">Stop</option>
+            </select>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mt-3">
+        <button onclick="executeTrade('buy')" class="cyber-button-primary py-2 rounded text-sm font-medium">BUY</button>
+        <button onclick="executeTrade('sell')" class="cyber-button-secondary py-2 rounded text-sm font-medium">SELL</button>
+    </div>
+</div>
+</main>
+</div>
+
+<!-- Mobile Navigation -->
+<nav class="md:hidden flex justify-around items-center bg-[var(--panel)] border-t border-[var(--border)] py-2">
+    <div onclick="window.location.href='index.html'" class="flex flex-col items-center active-tab">
+        <i data-feather="activity" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">TRADE</span>
+    </div>
+    <div onclick="window.location.href='positions.html'" class="flex flex-col items-center">
+        <i data-feather="briefcase" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">POSITIONS</span>
+    </div>
+    <div onclick="window.location.href='history.html'" class="flex flex-col items-center">
+        <i data-feather="clock" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">HISTORY</span>
+    </div>
+    <div class="flex flex-col items-center">
+        <i data-feather="user" class="w-5 h-5"></i>
+        <span class="text-xs mt-1">ACCOUNT</span>
+    </div>
+</nav>
+
+<script>
+    // Initialize Feather Icons
+    feather.replace();
+
+    // Trading data with real market symbols
+    const symbols = [
+        // Forex
+        { name: "EUR/USD", type: "FX", price: 1.0845, change: 0.12, spread: 0.2, high: 1.0856, low: 1.0832, provider: "OANDA:FX_EURUSD", exchange: "FX_IDC", category: "forex" },
+        { name: "GBP/USD", type: "FX", price: 1.2650, change: -0.05, spread: 0.3, high: 1.2672, low: 1.2638, provider: "OANDA:FX_GBPUSD", exchange: "FX_IDC", category: "forex" },
+        { name: "USD/JPY", type: "FX", price: 151.35, change: 0.24, spread: 0.4, high: 151.48, low: 151.12, provider: "OANDA:FX_USDJPY", exchange: "FX_IDC", category: "forex" },
+        { name: "AUD/USD", type: "FX", price: 0.6580, change: -0.18, spread: 0.3, high: 0.6595, low: 0.6565, provider: "OANDA:FX_AUDUSD", exchange: "FX_IDC", category: "forex" },
+        { name: "USD/CAD", type: "FX", price: 1.3520, change: 0.15, spread: 0.3, high: 1.3535, low: 1.3505, provider: "OANDA:FX_USDCAD", exchange: "FX_IDC", category: "forex" },
+
+        // Crypto
+        { name: "BTC/USD", type: "CR", price: 68245.00, change: -1.32, spread: 12.5, high: 69210.50, low: 67890.25, provider: "BINANCE:BTCUSDT", exchange: "BINANCE", category: "crypto" },
+        { name: "ETH/USD", type: "CR", price: 3450.25, change: 2.14, spread: 5.2, high: 3480.75, low: 3420.50, provider: "BINANCE:ETHUSDT", exchange: "BINANCE", category: "crypto" },
+        { name: "XRP/USD", type: "CR", price: 0.5120, change: 1.25, spread: 0.0005, high: 0.5150, low: 0.5100, provider: "BINANCE:XRPUSDT", exchange: "BINANCE", category: "crypto" },
+        { name: "SOL/USD", type: "CR", price: 185.50, change: 3.45, spread: 0.15, high: 187.25, low: 183.75, provider: "BINANCE:SOLUSDT", exchange: "BINANCE", category: "crypto" },
+        { name: "ADA/USD", type: "CR", price: 0.4625, change: -0.75, spread: 0.0005, high: 0.4650, low: 0.4600, provider: "BINANCE:ADAUSDT", exchange: "BINANCE", category: "crypto" },
+
+        // Stocks
+        { name: "AAPL", type: "ST", price: 172.50, change: -0.45, spread: 0.15, high: 173.20, low: 171.85, provider: "NASDAQ:AAPL", exchange: "NASDAQ", category: "stocks" },
+        { name: "TSLA", type: "ST", price: 175.30, change: 1.25, spread: 0.18, high: 176.50, low: 174.20, provider: "NASDAQ:TSLA", exchange: "NASDAQ", category: "stocks" },
+        { name: "MSFT", type: "ST", price: 425.75, change: 0.75, spread: 0.12, high: 426.50, low: 424.25, provider: "NASDAQ:MSFT", exchange: "NASDAQ", category: "stocks" },
+        { name: "AMZN", type: "ST", price: 178.90, change: -0.35, spread: 0.15, high: 179.50, low: 178.25, provider: "NASDAQ:AMZN", exchange: "NASDAQ", category: "stocks" },
+        { name: "GOOGL", type: "ST", price: 152.25, change: 0.95, spread: 0.10, high: 152.75, low: 151.50, provider: "NASDAQ:GOOGL", exchange: "NASDAQ", category: "stocks" },
+
+        // Indices
+        { name: "US500", type: "IDX", price: 5200.75, change: 0.75, spread: 0.25, high: 5210.25, low: 5195.50, provider: "OANDA:US500", exchange: "TVC", category: "indices" },
+        { name: "US30", type: "IDX", price: 39250.40, change: -0.35, spread: 1.0, high: 39320.75, low: 39210.25, provider: "OANDA:US30", exchange: "TVC", category: "indices" },
+        { name: "NAS100", type: "IDX", price: 18250.60, change: 1.25, spread: 1.5, high: 18275.25, low: 18220.50, provider: "OANDA:NAS100", exchange: "TVC", category: "indices" },
+
+        // Commodities
+        { name: "XAU/USD", type: "MT", price: 2185.50, change: 0.87, spread: 0.5, high: 2188.75, low: 2178.30, provider: "OANDA:MT_XAUUSD", exchange: "TVC", category: "commodities" },
+        { name: "XAG/USD", type: "MT", price: 24.35, change: 1.25, spread: 0.05, high: 24.50, low: 24.20, provider: "OANDA:MT_XAGUSD", exchange: "TVC", category: "commodities" },
+        { name: "OIL/USD", type: "MT", price: 85.25, change: -0.75, spread: 0.10, high: 85.75, low: 84.90, provider: "OANDA:MT_OILUSD", exchange: "TVC", category: "commodities" }
+    ];
+
+    let openTrades = [];
+    let tradeIdCounter = 1;
+    let currentSymbol = "EUR/USD";
+    let currentTimeframe = "60";
+    let tradingViewWidget = null;
+    let priceUpdateInterval;
+    let plUpdateInterval;
+    let priceSocket;
+    let currentTab = 'favorites';
+
+    // Initialize the app
+    function initApp() {
+        populateSymbolList();
+        updateCurrentSymbolInfo();
+        initTradingView();
+        updatePrices();
+        updatePositionsCount();
+
+        // Connect to real-time price updates
+        connectToPriceFeed();
+
+        // Set interval for position P/L updates
+        plUpdateInterval = setInterval(updatePositionsPL, 2000);
+
+        // Load initial prices from real APIs
+        fetchRealPrices();
+    }
+
+    // Connect to real-time price feed
+    function connectToPriceFeed() {
+        // In a real application, this would connect to a WebSocket API
+        // For demo purposes, we'll simulate real-time updates
+        priceSocket = {
+            close: function() {
+                clearInterval(priceUpdateInterval);
+            }
+        };
+
+        priceUpdateInterval = setInterval(() => {
             updatePrices();
-            updatePositionsCount();
-            
-            // Connect to real-time price updates
-            connectToPriceFeed();
-            
-            // Set interval for position P/L updates
-            plUpdateInterval = setInterval(updatePositionsPL, 2000);
-            
-            // Load initial prices from real APIs
             fetchRealPrices();
-        }
-        
-        // Connect to real-time price feed
-        function connectToPriceFeed() {
-            // In a real application, this would connect to a WebSocket API
-            // For demo purposes, we'll simulate real-time updates
-            priceSocket = {
-                close: function() {
-                    clearInterval(priceUpdateInterval);
+        }, 1500);
+    }
+
+    // Fetch real prices from APIs
+    function fetchRealPrices() {
+        // Forex API (free tier)
+        fetch('https://api.exchangerate-api.com/v4/latest/USD')
+            .then(response => response.json())
+            .then(data => {
+                // Update forex pairs
+                if (data.rates) {
+                    updateSymbolPrice('EUR/USD', 1 / data.rates.EUR);
+                    updateSymbolPrice('GBP/USD', 1 / data.rates.GBP);
+                    updateSymbolPrice('USD/JPY', data.rates.JPY);
+                    updateSymbolPrice('AUD/USD', 1 / data.rates.AUD);
+                    updateSymbolPrice('USD/CAD', data.rates.CAD);
                 }
-            };
-            
-            priceUpdateInterval = setInterval(() => {
-                updatePrices();
-                fetchRealPrices();
-            }, 1500);
-        }
-        
-        // Fetch real prices from APIs
-        function fetchRealPrices() {
-            // Forex API (free tier)
-            fetch('https://api.exchangerate-api.com/v4/latest/USD')
+            })
+            .catch(error => console.error('Error fetching forex data:', error));
+
+        // Crypto API (CoinGecko free tier)
+        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,ripple,solana,cardano&vs_currencies=usd')
+            .then(response => response.json())
+            .then(data => {
+                if (data.bitcoin) updateSymbolPrice('BTC/USD', data.bitcoin.usd);
+                if (data.ethereum) updateSymbolPrice('ETH/USD', data.ethereum.usd);
+                if (data.ripple) updateSymbolPrice('XRP/USD', data.ripple.usd);
+                if (data.solana) updateSymbolPrice('SOL/USD', data.solana.usd);
+                if (data.cardano) updateSymbolPrice('ADA/USD', data.cardano.usd);
+            })
+            .catch(error => console.error('Error fetching crypto data:', error));
+
+        // Stocks API (Alpha Vantage free tier)
+        // Note: In a real app, you'd need to handle API keys properly
+        const stocks = ['AAPL', 'TSLA', 'MSFT', 'AMZN', 'GOOGL'];
+        stocks.forEach(stock => {
+            fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock}&apikey=demo`)
                 .then(response => response.json())
                 .then(data => {
-                    // Update forex pairs
-                    if (data.rates) {
-                        updateSymbolPrice('EUR/USD', 1 / data.rates.EUR);
-                        updateSymbolPrice('GBP/USD', 1 / data.rates.GBP);
-                        updateSymbolPrice('USD/JPY', data.rates.JPY);
-                        updateSymbolPrice('AUD/USD', 1 / data.rates.AUD);
-                        updateSymbolPrice('USD/CAD', data.rates.CAD);
+                    if (data['Global Quote'] && data['Global Quote']['05. price']) {
+                        updateSymbolPrice(stock, parseFloat(data['Global Quote']['05. price']));
                     }
                 })
-                .catch(error => console.error('Error fetching forex data:', error));
-            
-            // Crypto API (CoinGecko free tier)
-            fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,ripple,solana,cardano&vs_currencies=usd')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.bitcoin) updateSymbolPrice('BTC/USD', data.bitcoin.usd);
-                    if (data.ethereum) updateSymbolPrice('ETH/USD', data.ethereum.usd);
-                    if (data.ripple) updateSymbolPrice('XRP/USD', data.ripple.usd);
-                    if (data.solana) updateSymbolPrice('SOL/USD', data.solana.usd);
-                    if (data.cardano) updateSymbolPrice('ADA/USD', data.cardano.usd);
-                })
-                .catch(error => console.error('Error fetching crypto data:', error));
-            
-            // Stocks API (Alpha Vantage free tier)
-            // Note: In a real app, you'd need to handle API keys properly
-            const stocks = ['AAPL', 'TSLA', 'MSFT', 'AMZN', 'GOOGL'];
-            stocks.forEach(stock => {
-                fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock}&apikey=demo`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data['Global Quote'] && data['Global Quote']['05. price']) {
-                            updateSymbolPrice(stock, parseFloat(data['Global Quote']['05. price']));
-                        }
-                    })
-                    .catch(error => console.error(`Error fetching ${stock} data:`, error));
-            });
-        }
-        
-        // Update symbol price
-        function updateSymbolPrice(symbolName, newPrice) {
-            const symbolIndex = symbols.findIndex(s => s.name === symbolName);
-            if (symbolIndex !== -1) {
-                // Calculate percentage change
-                const oldPrice = symbols[symbolIndex].price;
-                const change = ((newPrice - oldPrice) / oldPrice * 100).toFixed(2);
-                
-                // Update symbol data
-                symbols[symbolIndex].price = newPrice;
-                symbols[symbolIndex].change = parseFloat(change);
-                
-                // Update high/low
-                if (newPrice > symbols[symbolIndex].high) {
-                    symbols[symbolIndex].high = newPrice;
-                }
-                if (newPrice < symbols[symbolIndex].low) {
-                    symbols[symbolIndex].low = newPrice;
-                }
-                
-                // Update UI if this is the current symbol
-                if (currentSymbol === symbolName) {
-                    updateCurrentSymbolInfo();
-                }
-                
-                // Update positions that use this symbol
-                updatePositionsPL();
+                .catch(error => console.error(`Error fetching ${stock} data:`, error));
+        });
+    }
+
+    // Update symbol price
+    function updateSymbolPrice(symbolName, newPrice) {
+        const symbolIndex = symbols.findIndex(s => s.name === symbolName);
+        if (symbolIndex !== -1) {
+            // Calculate percentage change
+            const oldPrice = symbols[symbolIndex].price;
+            const change = ((newPrice - oldPrice) / oldPrice * 100).toFixed(2);
+
+            // Update symbol data
+            symbols[symbolIndex].price = newPrice;
+            symbols[symbolIndex].change = parseFloat(change);
+
+            // Update high/low
+            if (newPrice > symbols[symbolIndex].high) {
+                symbols[symbolIndex].high = newPrice;
             }
-        }
-        
-        // Populate symbol list
-        function populateSymbolList() {
-            const symbolList = document.getElementById('symbolList');
-            const mobileSymbolList = document.getElementById('mobileSymbolList');
-            
-            symbolList.innerHTML = '';
-            mobileSymbolList.innerHTML = '';
-            
-            // Filter symbols based on current tab
-            let filteredSymbols = symbols;
-            if (currentTab === 'favorites') {
-                // In a real app, you'd have a favorites system
-                filteredSymbols = symbols.slice(0, 8); // Just show first 8 as "favorites"
-            } else if (currentTab === 'forex') {
-                filteredSymbols = symbols.filter(s => s.category === 'forex');
-            } else if (currentTab === 'crypto') {
-                filteredSymbols = symbols.filter(s => s.category === 'crypto');
-            } else if (currentTab === 'stocks') {
-                filteredSymbols = symbols.filter(s => s.category === 'stocks');
+            if (newPrice < symbols[symbolIndex].low) {
+                symbols[symbolIndex].low = newPrice;
             }
-            
-            filteredSymbols.forEach(symbol => {
-                // Desktop symbol card
-                const symbolCard = document.createElement('div');
-                symbolCard.className = 'symbol-card p-3 rounded flex justify-between items-center cyber-border transition-all duration-200 cursor-pointer';
-                symbolCard.innerHTML = `
-                    <div class="flex items-center">
-                        <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                            <span class="text-xs">${symbol.type}</span>
-                        </div>
-                        <div>
-                            <div class="font-medium">${symbol.name}</div>
-                            <div class="text-xs text-[var(--text-dim)]">Spread: ${symbol.spread}</div>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <div class="font-display">${symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
-                        <div class="text-xs ${symbol.change >= 0 ? 'profit' : 'loss'}">${symbol.change >= 0 ? '+' : ''}${symbol.change}%</div>
-                    </div>
-                `;
-                symbolCard.addEventListener('click', () => selectSymbol(symbol));
-                symbolList.appendChild(symbolCard);
-                
-                // Mobile symbol card
-                const mobileSymbolCard = document.createElement('div');
-                mobileSymbolCard.className = 'mobile-market-card p-3 bg-[var(--panel)] rounded cyber-border min-w-[140px]';
-                mobileSymbolCard.innerHTML = `
-                    <div class="flex items-center">
-                        <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
-                            <span class="text-xs">${symbol.type}</span>
-                        </div>
-                        <div class="text-sm">${symbol.name}</div>
-                    </div>
-                    <div class="text-xs text-[var(--text-dim)] mt-1">Spread: ${symbol.spread}</div>
-                    <div class="font-display text-lg mt-1">${symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
-                    <div class="text-xs ${symbol.change >= 0 ? 'profit' : 'loss'} mt-1">${symbol.change >= 0 ? '+' : ''}${symbol.change}%</div>
-                    <div class="text-xs text-[var(--text-dim)] mt-1">Low: ${symbol.low.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
-                    <div class="text-xs text-[var(--text-dim)]">High: ${symbol.high.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
-                `;
-                mobileSymbolCard.addEventListener('click', () => selectSymbol(symbol));
-                mobileSymbolList.appendChild(mobileSymbolCard);
-            });
-        }
-        
-        // Filter symbols based on search input
-        function filterSymbols() {
-            const searchInput = document.getElementById('symbolSearch');
-            const searchTerm = searchInput.value.toLowerCase();
-            
-            const symbolCards = document.querySelectorAll('.symbol-card');
-            symbolCards.forEach(card => {
-                const symbolName = card.querySelector('.font-medium').textContent.toLowerCase();
-                if (symbolName.includes(searchTerm)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-        
-        // Select symbol
-        function selectSymbol(symbol) {
-            currentSymbol = symbol.name;
-            
-            // Update UI
-            document.getElementById('currentSymbol').textContent = symbol.name;
-            document.getElementById('symbolType').textContent = symbol.type;
-            document.getElementById('symbolProvider').textContent = symbol.provider;
-            document.getElementById('selectedSymbol').textContent = symbol.name;
-            document.getElementById('selectedPrice').textContent = symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
-            document.getElementById('mobileSelectedSymbol').textContent = symbol.name;
-            document.getElementById('mobileSelectedPrice').textContent = symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
-            
-            // Update TradingView chart
-            if (tradingViewWidget) {
-                tradingViewWidget.chart().setSymbol(symbol.exchange + ':' + symbol.name.replace('/', ''));
+
+            // Update UI if this is the current symbol
+            if (currentSymbol === symbolName) {
+                updateCurrentSymbolInfo();
             }
-            
-            // Update current symbol info
-            updateCurrentSymbolInfo();
-        }
-        
-        // Update current symbol info
-        function updateCurrentSymbolInfo() {
-            const symbol = symbols.find(s => s.name === currentSymbol);
-            if (!symbol) return;
-            
-            document.getElementById('bidPrice').textContent = (symbol.price - (symbol.spread / 2)).toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
-            document.getElementById('askPrice').textContent = (symbol.price + (symbol.spread / 2)).toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
-            document.getElementById('spreadValue').textContent = symbol.spread;
-            document.getElementById('dailyChange').textContent = `${symbol.change >= 0 ? '+' : ''}${symbol.change}%`;
-            document.getElementById('dailyChange').className = symbol.change >= 0 ? 'profit' : 'loss';
-            document.getElementById('dailyHigh').textContent = symbol.high.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
-            document.getElementById('dailyLow').textContent = symbol.low.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
-        }
-        
-        // Initialize TradingView Widget
-        function initTradingView() {
-            if (typeof TradingView === 'undefined') {
-                console.error('TradingView library not loaded');
-                return;
-            }
-            
-            const symbol = symbols.find(s => s.name === currentSymbol);
-            
-            tradingViewWidget = new TradingView.widget({
-                "autosize": true,
-                "symbol": symbol.exchange + ":" + symbol.name.replace('/', ''),
-                "interval": currentTimeframe,
-                "timezone": "Etc/UTC",
-                "theme": "dark",
-                "style": "1",
-                "locale": "en",
-                "toolbar_bg": "#12121a",
-                "enable_publishing": false,
-                "hide_top_toolbar": false,
-                "hide_side_toolbar": false,
-                "allow_symbol_change": true,
-                "studies": [
-                    "MAExp@tv-basicstudies",
-                    "RSI@tv-basicstudies"
-                ],
-                "container_id": "tradingview-chart",
-                "overrides": {
-                    "mainSeriesProperties.style": 1,
-                    "mainSeriesProperties.candleStyle.upColor": "#00ff85",
-                    "mainSeriesProperties.candleStyle.downColor": "#ff3c3c",
-                    "mainSeriesProperties.candleStyle.borderUpColor": "#00ff85",
-                    "mainSeriesProperties.candleStyle.borderDownColor": "#ff3c3c",
-                    "mainSeriesProperties.candleStyle.wickUpColor": "#00ff85",
-                    "mainSeriesProperties.candleStyle.wickDownColor": "#ff3c3c",
-                    "paneProperties.background": "#12121a",
-                    "paneProperties.vertGridProperties.color": "#25253a",
-                    "paneProperties.horzGridProperties.color": "#25253a",
-                    "scalesProperties.textColor": "#e0e0ff",
-                    "scalesProperties.lineColor": "#25253a"
-                }
-            });
-        }
-        
-        // Change timeframe
-        function changeTimeframe(timeframe) {
-            currentTimeframe = timeframe;
-            
-            // Update active tab
-            document.querySelectorAll('.flex.space-x-2 > div').forEach(el => {
-                el.classList.remove('active-tab');
-            });
-            event.target.classList.add('active-tab');
-            
-            if (tradingViewWidget) {
-                tradingViewWidget.chart().setResolution(timeframe);
-            }
-        }
-        
-        // Execute trade
-        function executeTrade(type) {
-            const symbol = symbols.find(s => s.name === currentSymbol);
-            if (!symbol) return;
-            
-            const volume = parseFloat(document.getElementById('tradeVolume').value) || 
-                          parseFloat(document.getElementById('mobileTradeVolume').value) || 0.1;
-            
-            const orderType = document.getElementById('orderType') ? 
-                             document.getElementById('orderType').value : 'market';
-            
-            let price;
-            if (orderType === 'market') {
-                price = type === 'buy' ? 
-                    (symbol.price + (symbol.spread / 2)) : 
-                    (symbol.price - (symbol.spread / 2));
-            } else {
-                // For limit/stop orders, we'd need additional UI for the entry price
-                price = type === 'buy' ? 
-                    (symbol.price - (symbol.spread / 2)) : 
-                    (symbol.price + (symbol.spread / 2));
-            }
-            
-            const sl = document.getElementById('stopLoss').value || 
-                      (type === 'buy' ? (price * 0.99).toFixed(4) : (price * 1.01).toFixed(4));
-            
-            const tp = document.getElementById('takeProfit').value || 
-                      (type === 'buy' ? (price * 1.01).toFixed(4) : (price * 0.99).toFixed(4));
-            
-            const trade = {
-                id: tradeIdCounter++,
-                symbol: currentSymbol,
-                type,
-                volume,
-                openPrice: parseFloat(price.toFixed(4)),
-                currentPrice: parseFloat(price.toFixed(4)),
-                sl: parseFloat(sl),
-                tp: parseFloat(tp),
-                pl: 0,
-                timestamp: new Date().toLocaleTimeString(),
-                symbolType: symbol.type,
-                orderType: orderType,
-                status: orderType === 'market' ? 'open' : 'pending'
-            };
-            
-            openTrades.push(trade);
-            updatePositionsTable();
-            updatePositionsCount();
-            
-            // Add visual feedback
-            const button = event.target;
-            button.classList.add('trade-executed');
-            setTimeout(() => {
-                button.classList.remove('trade-executed');
-            }, 500);
-            
-            // Update balance/equity (simulate margin usage)
-            updateBalanceAndEquity();
-            
-            // Show trade confirmation
-            showTradeNotification(trade);
-        }
-        
-        // Show trade notification
-        function showTradeNotification(trade) {
-            const notification = document.createElement('div');
-            notification.className = `fixed bottom-4 right-4 p-3 rounded cyber-border ${trade.type === 'buy' ? 'bg-green-900' : 'bg-purple-900'} text-white z-50`;
-            notification.innerHTML = `
-                <div class="font-bold">Trade Executed</div>
-                <div class="text-sm">${trade.type.toUpperCase()} ${trade.volume} ${trade.symbol} @ ${trade.openPrice}</div>
-                <div class="text-xs">Order ID: #${trade.id}</div>
-            `;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-        
-        // Close trade
-        function closeTrade(id) {
-            const index = openTrades.findIndex(trade => trade.id === id);
-            if (index !== -1) {
-                const trade = openTrades[index];
-                
-                // Update balance with P/L
-                const balanceElement = document.getElementById('walletBalance');
-                let balance = parseFloat(balanceElement.textContent.replace(/[^0-9.]/g, ''));
-                balance += trade.pl;
-                balanceElement.textContent = `$${balance.toFixed(2)}`;
-                
-                // Remove trade
-                openTrades.splice(index, 1);
-                updatePositionsTable();
-                updatePositionsCount();
-                updateBalanceAndEquity();
-                
-                // Show close notification
-                showCloseNotification(trade);
-            }
-        }
-        
-        // Show close notification
-        function showCloseNotification(trade) {
-            const notification = document.createElement('div');
-            notification.className = `fixed bottom-4 right-4 p-3 rounded cyber-border ${trade.pl >= 0 ? 'bg-green-900' : 'bg-red-900'} text-white z-50`;
-            notification.innerHTML = `
-                <div class="font-bold">Position Closed</div>
-                <div class="text-sm">${trade.symbol} P/L: ${trade.pl >= 0 ? '+' : ''}$${trade.pl.toFixed(2)}</div>
-                <div class="text-xs">Order ID: #${trade.id}</div>
-            `;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-        
-        // Update positions table
-        function updatePositionsTable() {
-            const tbody = document.getElementById('positionsTable');
-            if (!tbody) return;
-            
-            tbody.innerHTML = '';
-            
-            openTrades.forEach(trade => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-[var(--border)] position-highlight';
-                
-                tr.innerHTML = `
-                    <td class="px-4 py-2 text-sm font-mono">#${trade.id}</td>
-                    <td class="px-4 py-2 text-sm">${trade.symbol}</td>
-                    <td class="px-4 py-2 text-sm">${trade.volume}</td>
-                    <td class="px-4 py-2 text-sm">${trade.sl.toFixed(trade.symbolType === 'FX' ? 4 : 2)} / ${trade.tp.toFixed(trade.symbolType === 'FX' ? 4 : 2)}</td>
-                    <td class="px-4 py-2 text-sm">${trade.openPrice.toFixed(trade.symbolType === 'FX' ? 4 : 2)}</td>
-                    <td class="px-4 py-2 text-sm">${trade.currentPrice.toFixed(trade.symbolType === 'FX' ? 4 : 2)}</td>
-                    <td class="px-4 py-2 text-sm ${trade.pl >= 0 ? 'profit' : 'loss'}">${trade.pl >= 0 ? '+' : ''}${trade.pl.toFixed(2)}</td>
-                    <td class="px-4 py-2 text-sm">
-                        <button onclick="closeTrade(${trade.id})" class="cyber-button-primary px-2 py-1 text-xs mr-1">CLOSE</button>
-                        <button class="cyber-button px-2 py-1 text-xs">EDIT</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-        
-        // Update positions count
-        function updatePositionsCount() {
-            const countElement = document.getElementById('positionsCount');
-            if (countElement) {
-                const openPositions = openTrades.filter(t => t.status === 'open').length;
-                const pendingPositions = openTrades.filter(t => t.status === 'pending').length;
-                
-                let text = '';
-                if (openPositions > 0 && pendingPositions > 0) {
-                    text = `${openPositions} open, ${pendingPositions} pending`;
-                } else if (openPositions > 0) {
-                    text = `${openPositions} position${openPositions !== 1 ? 's' : ''}`;
-                } else if (pendingPositions > 0) {
-                    text = `${pendingPositions} pending`;
-                } else {
-                    text = '0 positions';
-                }
-                
-                countElement.textContent = text;
-            }
-        }
-        
-        // Update positions P/L
-        function updatePositionsPL() {
-            openTrades.forEach(trade => {
-                const symbol = symbols.find(s => s.name === trade.symbol);
-                if (symbol) {
-                    // Update current price from live data
-                    trade.currentPrice = trade.type === 'buy' ? 
-                        (symbol.price + (symbol.spread / 2)) : 
-                        (symbol.price - (symbol.spread / 2));
-                    
-                    // Calculate P/L
-                    const priceDifference = trade.type === 'buy' ? 
-                        (trade.currentPrice - trade.openPrice) : 
-                        (trade.openPrice - trade.currentPrice);
-                    
-                    // Different calculation for different asset types
-                    if (trade.symbolType === 'FX') {
-                        trade.pl = priceDifference * trade.volume * 10000; // Standard lot size
-                    } else if (trade.symbolType === 'CR') {
-                        trade.pl = priceDifference * trade.volume;
-                    } else {
-                        // Stocks, indices, etc.
-                        trade.pl = priceDifference * trade.volume * 100; // Assuming 100 shares per lot
-                    }
-                    
-                    // Check for SL/TP hits
-                    if (trade.status === 'open') {
-                        if ((trade.type === 'buy' && trade.currentPrice <= trade.sl) || 
-                            (trade.type === 'sell' && trade.currentPrice >= trade.sl)) {
-                            // Stop loss hit
-                            closeTrade(trade.id);
-                        } else if ((trade.type === 'buy' && trade.currentPrice >= trade.tp) || 
-                                   (trade.type === 'sell' && trade.currentPrice <= trade.tp)) {
-                            // Take profit hit
-                            closeTrade(trade.id);
-                        }
-                    }
-                }
-            });
-            
-            // Update table if there are open positions
-            if (openTrades.length > 0) {
-                updatePositionsTable();
-                updateBalanceAndEquity();
-            }
-        }
-        
-        // Update balance and equity
-        function updateBalanceAndEquity() {
-            const balanceElement = document.getElementById('walletBalance');
-            const equityElement = document.getElementById('equityValue');
-            const plElement = document.getElementById('plValue');
-            
-            let balance = parseFloat(balanceElement.textContent.replace(/[^0-9.]/g, ''));
-            let totalPL = 0;
-            
-            // Calculate total P/L from open positions
-            openTrades.forEach(trade => {
-                if (trade.status === 'open') {
-                    totalPL += trade.pl;
-                }
-            });
-            
-            // Update equity (balance + P/L)
-            const equity = balance + totalPL;
-            
-            // Update margin (simplified calculation)
-            const margin = openTrades.reduce((sum, trade) => {
-                if (trade.status === 'open') {
-                    return sum + (trade.volume * (trade.symbolType === 'FX' ? 1000 : 100));
-                }
-                return sum;
-            }, 0);
-            
-            // Update UI
-            equityElement.textContent = `$${equity.toFixed(2)}`;
-            plElement.textContent = `${totalPL >= 0 ? '+' : ''}$${totalPL.toFixed(2)}`;
-            plElement.className = totalPL >= 0 ? 'font-medium profit' : 'font-medium loss';
-            document.getElementById('marginValue').textContent = `$${margin.toFixed(2)}`;
-        }
-        
-        // Toggle search bar
-        function toggleSearch() {
-            const searchBar = document.getElementById('searchBar');
-            searchBar.classList.toggle('hidden');
-            
-            if (!searchBar.classList.contains('hidden')) {
-                document.getElementById('symbolSearch').focus();
-            }
-        }
-        
-        // Switch between tabs
-        function switchTab(tab) {
-            currentTab = tab;
-            
-            // Update active tab
-            document.querySelectorAll('.flex.border-b div').forEach(el => {
-                el.classList.remove('active-tab');
-                el.classList.add('text-[var(--text-dim)]');
-            });
-            event.target.classList.add('active-tab');
-            event.target.classList.remove('text-[var(--text-dim)]');
-            
-            // Repopulate symbol list
-            populateSymbolList();
-        }
-        
-        // Toggle mobile menu
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        }
-        
-        // Update prices (simulate market movement)
-        function updatePrices() {
-            // In a real application, this would fetch live prices from an API
-            // For demo purposes, we'll simulate realistic price movements
-            
-            symbols.forEach(symbol => {
-                // Skip updating prices for symbols that we get from real APIs
-                if (symbol.name === 'EUR/USD' || symbol.name === 'GBP/USD' || symbol.name === 'USD/JPY' || 
-                    symbol.name === 'BTC/USD' || symbol.name === 'ETH/USD' || symbol.name === 'AAPL') {
-                    return;
-                }
-                
-                // Simulate price movement based on symbol type volatility
-                let volatility = 0.0005; // Default for FX
-                if (symbol.type === 'CR') volatility = 0.01;
-                else if (symbol.type === 'MT') volatility = 0.002;
-                else if (symbol.type === 'ST') volatility = 0.005;
-                else if (symbol.type === 'IDX') volatility = 0.003;
-                
-                // More realistic price movement with momentum
-                const change = (Math.random() - 0.5) * 2 * volatility * (1 + Math.abs(symbol.change)/100);
-                symbol.price = symbol.price * (1 + change);
-                
-                // Update daily high/low
-                if (symbol.price > symbol.high) symbol.high = symbol.price;
-                if (symbol.price < symbol.low) symbol.low = symbol.price;
-                
-                // Update change percentage (from a base price)
-                const basePrice = symbol.type === 'FX' ? 1.08 : 
-                                symbol.type === 'CR' ? 50000 : 
-                                symbol.type === 'MT' ? 2000 : 100;
-                symbol.change = ((symbol.price - basePrice) / basePrice * 100).toFixed(2);
-            });
-            
-            // Update current symbol info if it's the selected one
-            updateCurrentSymbolInfo();
-            
-            // Update positions with new prices
+
+            // Update positions that use this symbol
             updatePositionsPL();
         }
-        
-        // Clean up when page unloads
-        window.addEventListener('beforeunload', () => {
-            if (priceSocket) priceSocket.close();
-            if (plUpdateInterval) clearInterval(plUpdateInterval);
-            if (priceUpdateInterval) clearInterval(priceUpdateInterval);
+    }
+
+    // Populate symbol list
+    function populateSymbolList() {
+        const symbolList = document.getElementById('symbolList');
+        const mobileSymbolList = document.getElementById('mobileSymbolList');
+
+        symbolList.innerHTML = '';
+        mobileSymbolList.innerHTML = '';
+
+        // Filter symbols based on current tab
+        let filteredSymbols = symbols;
+        if (currentTab === 'favorites') {
+            // In a real app, you'd have a favorites system
+            filteredSymbols = symbols.slice(0, 8); // Just show first 8 as "favorites"
+        } else if (currentTab === 'forex') {
+            filteredSymbols = symbols.filter(s => s.category === 'forex');
+        } else if (currentTab === 'crypto') {
+            filteredSymbols = symbols.filter(s => s.category === 'crypto');
+        } else if (currentTab === 'stocks') {
+            filteredSymbols = symbols.filter(s => s.category === 'stocks');
+        }
+
+        filteredSymbols.forEach(symbol => {
+            // Desktop symbol card
+            const symbolCard = document.createElement('div');
+            symbolCard.className = 'symbol-card p-3 rounded flex justify-between items-center cyber-border transition-all duration-200 cursor-pointer';
+            symbolCard.innerHTML = `
+                <div class="flex items-center">
+                    <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
+                        <span class="text-xs">${symbol.type}</span>
+                    </div>
+                    <div>
+                        <div class="font-medium">${symbol.name}</div>
+                        <div class="text-xs text-[var(--text-dim)]">Spread: ${symbol.spread}</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="font-display">${symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
+                    <div class="text-xs ${symbol.change >= 0 ? 'profit' : 'loss'}">${symbol.change >= 0 ? '+' : ''}${symbol.change}%</div>
+                </div>
+            `;
+            symbolCard.addEventListener('click', () => selectSymbol(symbol));
+            symbolList.appendChild(symbolCard);
+
+            // Mobile symbol card
+            const mobileSymbolCard = document.createElement('div');
+            mobileSymbolCard.className = 'mobile-market-card p-3 bg-[var(--panel)] rounded cyber-border min-w-[140px]';
+            mobileSymbolCard.innerHTML = `
+                <div class="flex items-center">
+                    <div class="w-6 h-6 rounded-full bg-[var(--bg-dark)] flex items-center justify-center mr-2">
+                        <span class="text-xs">${symbol.type}</span>
+                    </div>
+                    <div class="text-sm">${symbol.name}</div>
+                </div>
+                <div class="text-xs text-[var(--text-dim)] mt-1">Spread: ${symbol.spread}</div>
+                <div class="font-display text-lg mt-1">${symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
+                <div class="text-xs ${symbol.change >= 0 ? 'profit' : 'loss'} mt-1">${symbol.change >= 0 ? '+' : ''}${symbol.change}%</div>
+                <div class="text-xs text-[var(--text-dim)] mt-1">Low: ${symbol.low.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
+                <div class="text-xs text-[var(--text-dim)]">High: ${symbol.high.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2})}</div>
+            `;
+            mobileSymbolCard.addEventListener('click', () => selectSymbol(symbol));
+            mobileSymbolList.appendChild(mobileSymbolCard);
         });
-        
-        // Initialize the app when the page loads
-        window.addEventListener('load', initApp);
-    </script>
+    }
+
+    // Filter symbols based on search input
+    function filterSymbols() {
+        const searchInput = document.getElementById('symbolSearch');
+        const searchTerm = searchInput.value.toLowerCase();
+
+        const symbolCards = document.querySelectorAll('.symbol-card');
+        symbolCards.forEach(card => {
+            const symbolName = card.querySelector('.font-medium').textContent.toLowerCase();
+            if (symbolName.includes(searchTerm)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Select symbol
+    function selectSymbol(symbol) {
+        currentSymbol = symbol.name;
+
+        // Update UI
+        document.getElementById('currentSymbol').textContent = symbol.name;
+        document.getElementById('symbolType').textContent = symbol.type;
+        document.getElementById('symbolProvider').textContent = symbol.provider;
+        document.getElementById('selectedSymbol').textContent = symbol.name;
+        document.getElementById('selectedPrice').textContent = symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+        document.getElementById('mobileSelectedSymbol').textContent = symbol.name;
+        document.getElementById('mobileSelectedPrice').textContent = symbol.price.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+
+        // Update TradingView chart
+        if (tradingViewWidget) {
+            tradingViewWidget.chart().setSymbol(symbol.exchange + ':' + symbol.name.replace('/', ''));
+        }
+
+        // Update current symbol info
+        updateCurrentSymbolInfo();
+    }
+
+    // Update current symbol info
+    function updateCurrentSymbolInfo() {
+        const symbol = symbols.find(s => s.name === currentSymbol);
+        if (!symbol) return;
+
+        document.getElementById('bidPrice').textContent = (symbol.price - (symbol.spread / 2)).toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+        document.getElementById('askPrice').textContent = (symbol.price + (symbol.spread / 2)).toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+        document.getElementById('spreadValue').textContent = symbol.spread;
+        document.getElementById('dailyChange').textContent = `${symbol.change >= 0 ? '+' : ''}${symbol.change}%`;
+        document.getElementById('dailyChange').className = symbol.change >= 0 ? 'profit' : 'loss';
+        document.getElementById('dailyHigh').textContent = symbol.high.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+        document.getElementById('dailyLow').textContent = symbol.low.toLocaleString(undefined, {maximumFractionDigits: symbol.type === 'FX' ? 4 : 2});
+    }
+
+    // Initialize TradingView Widget
+    function initTradingView() {
+        if (typeof TradingView === 'undefined') {
+            console.error('TradingView library not loaded');
+            return;
+        }
+
+        const symbol = symbols.find(s => s.name === currentSymbol);
+
+        tradingViewWidget = new TradingView.widget({
+            "autosize": true,
+            "symbol": symbol.exchange + ":" + symbol.name.replace('/', ''),
+            "interval": currentTimeframe,
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#12121a",
+            "enable_publishing": false,
+            "hide_top_toolbar": false,
+            "hide_side_toolbar": false,
+            "allow_symbol_change": true,
+            "studies": [
+                "MAExp@tv-basicstudies",
+                "RSI@tv-basicstudies"
+            ],
+            "container_id": "tradingview-chart",
+            "overrides": {
+                "mainSeriesProperties.style": 1,
+                "mainSeriesProperties.candleStyle.upColor": "#00ff85",
+                "mainSeriesProperties.candleStyle.downColor": "#ff3c3c",
+                "mainSeriesProperties.candleStyle.borderUpColor": "#00ff85",
+                "mainSeriesProperties.candleStyle.borderDownColor": "#ff3c3c",
+                "mainSeriesProperties.candleStyle.wickUpColor": "#00ff85",
+                "mainSeriesProperties.candleStyle.wickDownColor": "#ff3c3c",
+                "paneProperties.background": "#12121a",
+                "paneProperties.vertGridProperties.color": "#25253a",
+                "paneProperties.horzGridProperties.color": "#25253a",
+                "scalesProperties.textColor": "#e0e0ff",
+                "scalesProperties.lineColor": "#25253a"
+            }
+        });
+    }
+
+    // Change timeframe
+    function changeTimeframe(timeframe) {
+        currentTimeframe = timeframe;
+
+        // Update active tab
+        document.querySelectorAll('.flex.space-x-2 > div').forEach(el => {
+            el.classList.remove('active-tab');
+        });
+        event.target.classList.add('active-tab');
+
+        if (tradingViewWidget) {
+            tradingViewWidget.chart().setResolution(timeframe);
+        }
+    }
+
+    // Execute trade
+    function executeTrade(type) {
+        const symbol = symbols.find(s => s.name === currentSymbol);
+        if (!symbol) return;
+
+        const volume = parseFloat(document.getElementById('tradeVolume').value) ||
+                      parseFloat(document.getElementById('mobileTradeVolume').value) || 0.1;
+
+        const orderType = document.getElementById('orderType') ?
+                         document.getElementById('orderType').value : 'market';
+
+        let price;
+        if (orderType === 'market') {
+            price = type === 'buy' ?
+                  (symbol.price + (symbol.spread / 2)) :
+                  (symbol.price - (symbol.spread / 2));
+        } else {
+            // For limit/stop orders, we'd need additional UI for the entry price
+            price = type === 'buy' ?
+                  (symbol.price - (symbol.spread / 2)) :
+                  (symbol.price + (symbol.spread / 2));
+        }
+
+        const sl = document.getElementById('stopLoss').value ||
+                   (type === 'buy' ? (price * 0.99).toFixed(4) : (price * 1.01).toFixed(4));
+
+        const tp = document.getElementById('takeProfit').value ||
+                   (type === 'buy' ? (price * 1.01).toFixed(4) : (price * 0.99).toFixed(4));
+
+        const trade = {
+            id: tradeIdCounter++,
+            symbol: currentSymbol,
+            type,
+            volume,
+            openPrice: parseFloat(price.toFixed(4)),
+            currentPrice: parseFloat(price.toFixed(4)),
+            sl: parseFloat(sl),
+            tp: parseFloat(tp),
+            pl: 0,
+            timestamp: new Date().toLocaleTimeString(),
+            symbolType: symbol.type,
+            orderType: orderType,
+            status: orderType === 'market' ? 'open' : 'pending'
+        };
+
+        openTrades.push(trade);
+        updatePositionsTable();
+        updatePositionsCount();
+
+        // Add visual feedback
+        const button = event.target;
+        button.classList.add('trade-executed');
+        setTimeout(() => {
+            button.classList.remove('trade-executed');
+        }, 500);
+
+        // Update balance/equity (simulate margin usage)
+        updateBalanceAndEquity();
+
+        // Show trade confirmation
+        showTradeNotification(trade);
+    }
+
+    // Show trade notification
+    function showTradeNotification(trade) {
+        const notification = document.createElement('div');
+        notification.className = `fixed bottom-4 right-4 p-3 rounded cyber-border ${trade.type === 'buy' ? 'bg-green-900' : 'bg-purple-900'} text-white z-50 notification`;
+        notification.innerHTML = `
+            <div class="font-bold">Trade Executed</div>
+            <div class="text-sm">${trade.type.toUpperCase()} ${trade.volume} ${trade.symbol} @ ${trade.openPrice}</div>
+            <div class="text-xs">Order ID: #${trade.id}</div>
+        `;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.add('hide');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+
+    // Close trade
+    function closeTrade(id) {
+        const index = openTrades.findIndex(trade => trade.id === id);
+        if (index !== -1) {
+            const trade = openTrades[index];
+
+            // Update balance with P/L
+            const balanceElement = document.getElementById('walletBalance');
+            let balance = parseFloat(balanceElement.textContent.replace(/[^0-9.]/g, ''));
+            balance += trade.pl;
+            balanceElement.textContent = `$${balance.toFixed(2)}`;
+
+            // Remove trade
+            openTrades.splice(index, 1);
+            updatePositionsTable();
+            updatePositionsCount();
+            updateBalanceAndEquity();
+
+            // Show close notification
+            showCloseNotification(trade);
+        }
+    }
+
+    // Show close notification
+    function showCloseNotification(trade) {
+        const notification = document.createElement('div');
+        notification.className = `fixed bottom-4 right-4 p-3 rounded cyber-border ${trade.pl >= 0 ? 'bg-green-900' : 'bg-red-900'} text-white z-50 notification`;
+        notification.innerHTML = `
+            <div class="font-bold">Position Closed</div>
+            <div class="text-sm">${trade.symbol} P/L: ${trade.pl >= 0 ? '+' : ''}$${trade.pl.toFixed(2)}</div>
+            <div class="text-xs">Order ID: #${trade.id}</div>
+        `;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.add('hide');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+
+    // Update positions table
+    function updatePositionsTable() {
+        const tbody = document.getElementById('positionsTable');
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+
+        openTrades.forEach(trade => {
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-[var(--border)] position-highlight';
+
+            tr.innerHTML = `
+                <td class="px-4 py-2 text-sm font-mono">#${trade.id}</td>
+                <td class="px-4 py-2 text-sm">${trade.symbol}</td>
+                <td class="px-4 py-2 text-sm">${trade.volume}</td>
+                <td class="px-4 py-2 text-sm">${trade.sl.toFixed(trade.symbolType === 'FX' ? 4 : 2)} / ${trade.tp.toFixed(trade.symbolType === 'FX' ? 4 : 2)}</td>
+                <td class="px-4 py-2 text-sm">${trade.openPrice.toFixed(trade.symbolType === 'FX' ? 4 : 2)}</td>
+                <td class="px-4 py-2 text-sm">${trade.currentPrice.toFixed(trade.symbolType === 'FX' ? 4 : 2)}</td>
+                <td class="px-4 py-2 text-sm ${trade.pl >= 0 ? 'profit' : 'loss'}">${trade.pl >= 0 ? '+' : ''}${trade.pl.toFixed(2)}</td>
+                <td class="px-4 py-2 text-sm">
+                    <button onclick="closeTrade(${trade.id})" class="cyber-button-primary px-2 py-1 text-xs mr-1">CLOSE</button>
+                    <button class="cyber-button px-2 py-1 text-xs">EDIT</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Update positions count
+    function updatePositionsCount() {
+        const countElement = document.getElementById('positionsCount');
+        if (countElement) {
+            const openPositions = openTrades.filter(t => t.status === 'open').length;
+            const pendingPositions = openTrades.filter(t => t.status === 'pending').length;
+
+            let text = '';
+            if (openPositions > 0 && pendingPositions > 0) {
+                text = `${openPositions} open, ${pendingPositions} pending`;
+            } else if (openPositions > 0) {
+                text = `${openPositions} position${openPositions !== 1 ? 's' : ''}`;
+            } else if (pendingPositions > 0) {
+                text = `${pendingPositions} pending`;
+            } else {
+                text = '0 positions';
+            }
+
+            countElement.textContent = text;
+        }
+    }
+
+    // Update positions P/L
+    function updatePositionsPL() {
+        openTrades.forEach(trade => {
+            const symbol = symbols.find(s => s.name === trade.symbol);
+            if (symbol) {
+                // Update current price from live data
+                trade.currentPrice = trade.type === 'buy' ?
+                      (symbol.price + (symbol.spread / 2)) :
+                      (symbol.price - (symbol.spread / 2));
+
+                // Calculate P/L
+                const priceDifference = trade.type === 'buy' ?
+                      (trade.currentPrice - trade.openPrice) :
+                      (trade.openPrice - trade.currentPrice);
+
+                // Different calculation for different asset types
+                if (trade.symbolType === 'FX') {
+                    trade.pl = priceDifference * trade.volume * 10000; // Standard lot size
+                } else if (trade.symbolType === 'CR') {
+                    trade.pl = priceDifference * trade.volume;
+                } else {
+                    // Stocks, indices, etc.
+                    trade.pl = priceDifference * trade.volume * 100; // Assuming 100 shares per lot
+                }
+
+                // Check for SL/TP hits
+                if (trade.status === 'open') {
+                    if ((trade.type === 'buy' && trade.currentPrice <= trade.sl) ||
+                          (trade.type === 'sell' && trade.currentPrice >= trade.sl)) {
+                        // Stop loss hit
+                        closeTrade(trade.id);
+                    } else if ((trade.type === 'buy' && trade.currentPrice >= trade.tp) ||
+                                 (trade.type === 'sell' && trade.currentPrice <= trade.tp)) {
+                        // Take profit hit
+                        closeTrade(trade.id);
+                    }
+                }
+            }
+        });
+
+        // Update table if there are open positions
+        if (openTrades.length > 0) {
+            updatePositionsTable();
+            updateBalanceAndEquity();
+        }
+    }
+
+    // Update balance and equity
+    function updateBalanceAndEquity() {
+        const balanceElement = document.getElementById('walletBalance');
+        const equityElement = document.getElementById('equityValue');
+        const plElement = document.getElementById('plValue');
+
+        let balance = parseFloat(balanceElement.textContent.replace(/[^0-9.]/g, ''));
+        let totalPL = 0;
+
+        // Calculate total P/L from open positions
+        openTrades.forEach(trade => {
+            if (trade.status === 'open') {
+                totalPL += trade.pl;
+            }
+        });
+
+        // Update equity (balance + P/L)
+        const equity = balance + totalPL;
+
+        // Update margin (simplified calculation)
+        const margin = openTrades.reduce((sum, trade) => {
+            if (trade.status === 'open') {
+                return sum + (trade.volume * (trade.symbolType === 'FX' ? 1000 : 100));
+            }
+            return sum;
+        }, 0);
+
+        // Update UI
+        equityElement.textContent = `$${equity.toFixed(2)}`;
+        plElement.textContent = `${totalPL >= 0 ? '+' : ''}$${totalPL.toFixed(2)}`;
+        plElement.className = totalPL >= 0 ? 'font-medium profit' : 'font-medium loss';
+        document.getElementById('marginValue').textContent = `$${margin.toFixed(2)}`;
+    }
+
+    // Toggle search bar
+    function toggleSearch() {
+        const searchBar = document.getElementById('searchBar');
+        searchBar.classList.toggle('hidden');
+
+        if (!searchBar.classList.contains('hidden')) {
+            document.getElementById('symbolSearch').focus();
+        }
+    }
+
+    // Switch between tabs
+    function switchTab(tab) {
+        currentTab = tab;
+
+        // Update active tab
+        document.querySelectorAll('.flex.border-b div').forEach(el => {
+            el.classList.remove('active-tab');
+            el.classList.add('text-[var(--text-dim)]');
+        });
+        event.target.classList.add('active-tab');
+        event.target.classList.remove('text-[var(--text-dim)]');
+
+        // Repopulate symbol list
+        populateSymbolList();
+    }
+
+    // Toggle mobile menu
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        menu.classList.toggle('hidden');
+    }
+
+    // Update prices (simulate market movement)
+    function updatePrices() {
+        // In a real application, this would fetch live prices from an API
+        // For demo purposes, we'll simulate realistic price movements
+
+        symbols.forEach(symbol => {
+            // Skip updating prices for symbols that we get from real APIs
+            if (symbol.name === 'EUR/USD' || symbol.name === 'GBP/USD' || symbol.name === 'USD/JPY' || 
+                symbol.name === 'BTC/USD' || symbol.name === 'ETH/USD' || symbol.name === 'AAPL') {
+                return;
+            }
+
+            // Simulate price movement based on symbol type volatility
+            let volatility = 0.0005; // Default for FX
+            if (symbol.type === 'CR') volatility = 0.01;
+            else if (symbol.type === 'MT') volatility = 0.002;
+            else if (symbol.type === 'ST') volatility = 0.005;
+            else if (symbol.type === 'IDX') volatility = 0.003;
+
+            // More realistic price movement with momentum
+            const change = (Math.random() - 0.5) * 2 * volatility * (1 + Math.abs(symbol.change)/100);
+            symbol.price = symbol.price * (1 + change);
+
+            // Update daily high/low
+            if (symbol.price > symbol.high) symbol.high = symbol.price;
+            if (symbol.price < symbol.low) symbol.low = symbol.price;
+
+            // Update change percentage (from a base price)
+            const basePrice = symbol.type === 'FX' ? 1.08 :
+                             symbol.type === 'CR' ? 50000 :
+                             symbol.type === 'MT' ? 2000 : 100;
+            symbol.change = ((symbol.price - basePrice) / basePrice * 100).toFixed(2);
+        });
+
+        // Update current symbol info if it's the selected one
+        updateCurrentSymbolInfo();
+
+        // Update positions with new prices
+        updatePositionsPL();
+    }
+
+    // Clean up when page unloads
+    window.addEventListener('beforeunload', () => {
+        if (priceSocket) priceSocket.close();
+        if (plUpdateInterval) clearInterval(plUpdateInterval);
+        if (priceUpdateInterval) clearInterval(priceUpdateInterval);
+    });
+
+    // Initialize the app when the page loads
+    window.addEventListener('load', initApp);
+</script>
 </body>
 </html>
